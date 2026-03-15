@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
-import type { Project, Experience, Skill, CV, ContactFormData, Review, ReviewInvitation, InvitationCheckResult } from '@/types'
-
+import type { Project, Experience, Skill, CV, ContactFormData, Review, ReviewInvitation, 
+  InvitationCheckResult ,BlogPost, BlogPostSummary } from '@/types'
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 
 // ─── Projects ────────────────────────────────────────────────────────────
@@ -254,3 +254,76 @@ export const useSubmitReview = () =>
     mutationFn: ({ token, content, rating }: { token: string; content: string; rating: number }) =>
       api.post(`/invitations/${token}/submit`, { content, rating }),
   })
+
+
+
+// ─── Blog ─────────────────────────────────────────────────────────────────
+
+export const useBlogPosts = (params?: { category?: string; tag?: string; search?: string }) =>
+  useQuery<BlogPostSummary[]>({
+    queryKey: ['blog', params],
+    queryFn: async () => {
+      const p = new URLSearchParams()
+      if (params?.category) p.append('category', params.category)
+      if (params?.tag)      p.append('tag', params.tag)
+      if (params?.search)   p.append('search', params.search)
+      return (await api.get(`/blog/?${p.toString()}`)).data
+    },
+  })
+
+export const useFeaturedPosts = () =>
+  useQuery<BlogPostSummary[]>({
+    queryKey: ['blog', 'featured'],
+    queryFn: async () => (await api.get('/blog/featured')).data,
+  })
+
+export const useBlogPost = (slug: string) =>
+  useQuery<BlogPost>({
+    queryKey: ['blog', slug],
+    queryFn: async () => (await api.get(`/blog/${slug}`)).data,
+    enabled: !!slug,
+  })
+
+export const useBlogCategories = () =>
+  useQuery<string[]>({
+    queryKey: ['blog-categories'],
+    queryFn: async () => (await api.get('/blog/categories')).data,
+  })
+
+export const useBlogTags = () =>
+  useQuery<string[]>({
+    queryKey: ['blog-tags'],
+    queryFn: async () => (await api.get('/blog/tags')).data,
+  })
+
+export const useAllBlogPosts = () =>
+  useQuery<BlogPostSummary[]>({
+    queryKey: ['blog', 'admin', 'all'],
+    queryFn: async () => (await api.get('/blog/admin/all')).data,
+  })
+
+export const useCreateBlogPost = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (form: FormData) =>
+      api.post('/blog/', form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['blog'] }),
+  })
+}
+
+export const useUpdateBlogPost = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, form }: { id: number; form: FormData }) =>
+      api.put(`/blog/${id}`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['blog'] }),
+  })
+}
+
+export const useDeleteBlogPost = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/blog/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['blog'] }),
+  })
+}

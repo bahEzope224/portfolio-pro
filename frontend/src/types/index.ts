@@ -100,3 +100,40 @@ export interface InvitationCheckResult {
   client_company?: string
   expires_at: string
 }
+
+
+export interface BlogPost {
+  id: number
+  title: string
+  slug: string
+  excerpt?: string
+  content: string
+  cover_path?: string
+  category: string
+  tags: string[]
+  reading_time: number
+  is_published: boolean
+  is_featured: boolean
+  views: number
+  meta_title?: string
+  meta_description?: string
+  published_at?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface BlogPostSummary {
+  id: number
+  title: string
+  slug: string
+  excerpt?: string
+  cover_path?: string
+  category: string
+  tags: string[]
+  reading_time: number
+  is_published: boolean   
+  is_featured: boolean
+  views: number
+  published_at?: string
+  created_at: string
+}

@@ -251,3 +251,63 @@ class PublicReviewSubmit(BaseModel):
         if len(v.strip()) < 10:
             raise ValueError("L'avis doit faire au moins 10 caractères")
         return v.strip()
+
+
+# ---------------------------------------------------------------------------
+# Blog
+# ---------------------------------------------------------------------------
+
+class BlogPostBase(BaseModel):
+    title:            str
+    excerpt:          Optional[str] = None
+    content:          str
+    category:         str = "Général"
+    tags:             List[str] = []
+    reading_time:     int = 5
+    is_published:     bool = False
+    is_featured:      bool = False
+    meta_title:       Optional[str] = None
+    meta_description: Optional[str] = None
+
+
+class BlogPostCreate(BlogPostBase):
+    slug: Optional[str] = None
+
+
+class BlogPostUpdate(BlogPostBase):
+    title:        Optional[str] = None
+    content:      Optional[str] = None
+    category:     Optional[str] = None
+    slug:         Optional[str] = None
+
+
+class BlogPostOut(BlogPostBase):
+    id:           int
+    slug:         str
+    cover_path:   Optional[str] = None
+    views:        int
+    published_at: Optional[datetime] = None
+    created_at:   datetime
+    updated_at:   datetime
+
+    class Config:
+        from_attributes = True
+
+
+class BlogPostSummary(BaseModel):
+    id:           int
+    title:        str
+    slug:         str
+    excerpt:      Optional[str] = None
+    cover_path:   Optional[str] = None
+    category:     str
+    tags:         List[str]
+    reading_time: int
+    is_featured:  bool
+    is_published: bool    
+    views:        int
+    published_at: Optional[datetime] = None
+    created_at:   datetime
+
+    class Config:
+        from_attributes = True

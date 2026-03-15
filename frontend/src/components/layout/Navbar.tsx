@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { to: '/reviews',     label: 'Avis' },
   { to: '/cv',          label: 'CV' },
   { to: '/contact',     label: 'Contact' },
+  { to: '/blog', label: 'Blog' },
 ]
 
 export default function Navbar() {

@@ -126,3 +126,21 @@
 .page-enter {
   animation: fadeUp 0.5s ease forwards;
 }
+
+/* ─── Blog article typography ─────────────────────────────────────────── */
+.prose-blog h1 { @apply font-display font-bold text-white text-3xl mt-8 mb-4; }
+.prose-blog h2 { @apply font-display font-bold text-white text-2xl mt-7 mb-3; }
+.prose-blog h3 { @apply font-display font-semibold text-white text-xl mt-6 mb-2; }
+.prose-blog p  { @apply text-ink-200 leading-[1.85] mb-4 font-body; }
+.prose-blog strong { @apply text-white font-semibold; }
+.prose-blog em { @apply text-ink-200 italic; }
+.prose-blog a  { @apply text-accent-400 hover:text-accent-300 underline underline-offset-2 transition-colors; }
+.prose-blog code { @apply bg-ink-800 text-accent-300 px-1.5 py-0.5 rounded text-sm font-mono; }
+.prose-blog pre { @apply bg-ink-800/80 border border-white/[0.06] rounded-xl p-5 mb-5 overflow-x-auto; }
+.prose-blog pre code { @apply bg-transparent p-0 text-ink-200; }
+.prose-blog blockquote { @apply border-l-2 border-accent-500/50 pl-5 my-5 text-ink-300 italic; }
+.prose-blog ul { @apply list-none mb-4 space-y-2; }
+.prose-blog ul li { @apply text-ink-200 pl-5 relative; }
+.prose-blog ul li::before { content: '▸'; @apply absolute left-0 text-accent-500 text-xs top-1; }
+.prose-blog hr { @apply border-white/[0.06] my-8; }
+.prose-blog img { @apply rounded-xl w-full my-6 border border-white/[0.06]; }

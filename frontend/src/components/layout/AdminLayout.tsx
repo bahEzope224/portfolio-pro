@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FolderKanban, Briefcase,
-  Zap, FileText, LogOut, Code2, Star, Link2,
+  Zap, FileText, LogOut, Code2, Star, Link2,BookOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { clearToken } from '@/store/auth'
@@ -15,6 +15,8 @@ const ADMIN_LINKS = [
   { to: '/admin/reviews',      label: 'Avis publiés',   icon: Star },
   { to: '/admin/invitations',  label: 'Invitations',    icon: Link2 },
   { to: '/admin/cv',           label: 'CV',             icon: FileText },
+  { to: '/admin/blog', label: 'Blog', icon: BookOpen },
+
 ]
 
 export default function AdminLayout() {

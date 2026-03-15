@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 
 from app.database import engine, Base
 from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations
+from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations, blog
+
 
 # Créer les tables — ne plante pas si la DB est indisponible
 try:
@@ -45,6 +47,8 @@ app.include_router(cv.router,          prefix="/api/cv",          tags=["CV"])
 app.include_router(contact.router,     prefix="/api/contact",     tags=["Contact"])
 app.include_router(reviews.router,     prefix="/api/reviews",     tags=["Reviews"])
 app.include_router(invitations.router, prefix="/api/invitations", tags=["Invitations"])
+app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
+
 
 @app.get("/api/health", tags=["Health"])
 def health_check():

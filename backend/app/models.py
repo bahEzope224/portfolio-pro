@@ -114,3 +114,28 @@ class ReviewInvitation(Base):
     created_at    = Column(DateTime, default=datetime.utcnow)
     # Lien vers l'avis créé après soumission (nullable jusqu'à soumission)
     review_id     = Column(Integer, nullable=True)   # FK vers reviews.id
+
+
+class BlogPost(Base):
+    """
+    Article de blog avec support Markdown, catégories, tags et SEO.
+    """
+    __tablename__ = "blog_posts"
+
+    id            = Column(Integer, primary_key=True, index=True)
+    title         = Column(String(300), nullable=False)
+    slug          = Column(String(320), unique=True, index=True, nullable=False)
+    excerpt       = Column(String(500), nullable=True)
+    content       = Column(Text, nullable=False)
+    cover_path    = Column(String(500), nullable=True)
+    category      = Column(String(100), nullable=False, default="Général")
+    tags          = Column(JSON, default=list)
+    reading_time  = Column(Integer, default=5)
+    is_published  = Column(Boolean, default=False)
+    is_featured   = Column(Boolean, default=False)
+    views         = Column(Integer, default=0)
+    meta_title       = Column(String(70),  nullable=True)
+    meta_description = Column(String(160), nullable=True)
+    published_at  = Column(DateTime, nullable=True)
+    created_at    = Column(DateTime, default=datetime.utcnow)
+    updated_at    = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
