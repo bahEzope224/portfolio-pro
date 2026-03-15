@@ -10,14 +10,16 @@ import ExperiencesPage from '@/pages/public/ExperiencesPage'
 import SkillsPage      from '@/pages/public/SkillsPage'
 import CVPage          from '@/pages/public/CVPage'
 import ContactPage     from '@/pages/public/ContactPage'
+import ReviewsPage     from '@/pages/public/ReviewsPage'
 
 // Admin pages
-import LoginPage           from '@/pages/admin/LoginPage'
-import DashboardPage       from '@/pages/admin/DashboardPage'
-import AdminProjectsPage   from '@/pages/admin/AdminProjectsPage'
+import LoginPage            from '@/pages/admin/LoginPage'
+import DashboardPage        from '@/pages/admin/DashboardPage'
+import AdminProjectsPage    from '@/pages/admin/AdminProjectsPage'
 import AdminExperiencesPage from '@/pages/admin/AdminExperiencesPage'
-import AdminSkillsPage     from '@/pages/admin/AdminSkillsPage'
-import AdminCVPage         from '@/pages/admin/AdminCVPage'
+import AdminSkillsPage      from '@/pages/admin/AdminSkillsPage'
+import AdminCVPage          from '@/pages/admin/AdminCVPage'
+import AdminReviewsPage     from '@/pages/admin/AdminReviewsPage'
 
 export default function App() {
   return (
@@ -30,6 +32,7 @@ export default function App() {
         <Route path="/skills"      element={<SkillsPage />} />
         <Route path="/cv"          element={<CVPage />} />
         <Route path="/contact"     element={<ContactPage />} />
+        <Route path="/reviews"     element={<ReviewsPage />} />
       </Route>
 
       {/* ── Admin login ── */}
@@ -43,6 +46,7 @@ export default function App() {
           <Route path="/admin/experiences" element={<AdminExperiencesPage />} />
           <Route path="/admin/skills"      element={<AdminSkillsPage />} />
           <Route path="/admin/cv"          element={<AdminCVPage />} />
+          <Route path="/admin/reviews"     element={<AdminReviewsPage />} />
         </Route>
       </Route>
     </Routes>

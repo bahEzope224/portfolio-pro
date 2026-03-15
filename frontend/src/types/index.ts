@@ -63,3 +63,18 @@ export interface ContactFormData {
   subject: string
   message: string
 }
+
+export interface Review {
+  id: number
+  author_name: string
+  author_role: string
+  company?: string
+  avatar_path?: string
+  content: string
+  rating: number        // 1–5
+  is_featured: boolean
+  is_visible: boolean
+  order: number
+  created_at: string
+  updated_at: string
+}

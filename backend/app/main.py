@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.database import engine, Base
-from app.routers import projects, experiences, skills, cv, contact, auth
+from app.routers import projects, experiences, skills, cv, contact, auth, reviews
 
 # Create all database tables
 Base.metadata.create_all(bind=engine)
@@ -26,9 +26,6 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# ---------------------------------------------------------------------------
-# CORS Middleware
-# ---------------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:5173")],
@@ -37,23 +34,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# Static files (uploaded images & CVs)
-# ---------------------------------------------------------------------------
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-# ---------------------------------------------------------------------------
-# Routers
-# ---------------------------------------------------------------------------
 app.include_router(auth.router,        prefix="/api/auth",        tags=["Auth"])
 app.include_router(projects.router,    prefix="/api/projects",    tags=["Projects"])
 app.include_router(experiences.router, prefix="/api/experiences", tags=["Experiences"])
 app.include_router(skills.router,      prefix="/api/skills",      tags=["Skills"])
 app.include_router(cv.router,          prefix="/api/cv",          tags=["CV"])
 app.include_router(contact.router,     prefix="/api/contact",     tags=["Contact"])
-
+app.include_router(reviews.router,     prefix="/api/reviews",     tags=["Reviews"])
 
 @app.get("/api/health", tags=["Health"])
 def health_check():
-    """Simple health check endpoint."""
     return {"status": "ok", "message": "Portfolio API is running"}

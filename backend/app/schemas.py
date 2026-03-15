@@ -163,3 +163,44 @@ class ContactMessage(BaseModel):
     email: EmailStr
     subject: str
     message: str
+
+
+# ---------------------------------------------------------------------------
+# Reviews
+# ---------------------------------------------------------------------------
+
+class ReviewBase(BaseModel):
+    author_name: str
+    author_role: str
+    company: Optional[str] = None
+    content: str
+    rating: int = 5
+    is_featured: bool = False
+    is_visible: bool = True
+    order: int = 0
+
+    @validator("rating")
+    def rating_range(cls, v):
+        if not 1 <= v <= 5:
+            raise ValueError("rating must be between 1 and 5")
+        return v
+
+
+class ReviewCreate(ReviewBase):
+    pass
+
+
+class ReviewUpdate(ReviewBase):
+    author_name: Optional[str] = None
+    author_role: Optional[str] = None
+    content: Optional[str] = None
+
+
+class ReviewOut(ReviewBase):
+    id: int
+    avatar_path: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True

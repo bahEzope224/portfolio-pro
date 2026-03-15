@@ -74,3 +74,21 @@ class CV(Base):
     filename    = Column(String(255), nullable=False)
     file_path   = Column(String(500), nullable=False)  # relative: "uploads/cv/xxx.pdf"
     upload_date = Column(DateTime, default=datetime.utcnow)
+
+
+class Review(Base):
+    """Client / colleague testimonial / review."""
+    __tablename__ = "reviews"
+
+    id          = Column(Integer, primary_key=True, index=True)
+    author_name = Column(String(150), nullable=False)
+    author_role = Column(String(150), nullable=False)   # "CTO @ Startup Paris"
+    company     = Column(String(150), nullable=True)
+    avatar_path = Column(String(500), nullable=True)    # uploaded avatar image
+    content     = Column(Text, nullable=False)           # testimonial text
+    rating      = Column(Integer, default=5)             # 1–5 stars
+    is_featured = Column(Boolean, default=False)
+    is_visible  = Column(Boolean, default=True)          # toggle display on/off
+    order       = Column(Integer, default=0)
+    created_at  = Column(DateTime, default=datetime.utcnow)
+    updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

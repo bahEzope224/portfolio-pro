@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { FolderKanban, Briefcase, Zap, FileText, ArrowRight } from 'lucide-react'
-import { useProjects, useExperiences, useSkills, useCV } from '@/hooks/useApi'
+import { FolderKanban, Briefcase, Zap, FileText, ArrowRight, Star } from 'lucide-react'
+import { useProjects, useExperiences, useSkills, useCV, useAllReviews } from '@/hooks/useApi'
 import { AdminPage, Card } from '@/components/ui'
 
 export default function DashboardPage() {
@@ -8,17 +8,23 @@ export default function DashboardPage() {
   const { data: experiences } = useExperiences()
   const { data: skills }      = useSkills()
   const { data: cv }          = useCV()
+  const { data: reviews }     = useAllReviews()
 
   const stats = [
     { label: 'Projets',      value: projects?.length    ?? '—', icon: FolderKanban, to: '/admin/projects' },
     { label: 'Expériences',  value: experiences?.length ?? '—', icon: Briefcase,    to: '/admin/experiences' },
     { label: 'Compétences',  value: skills?.length      ?? '—', icon: Zap,          to: '/admin/skills' },
+    { label: 'Avis clients', value: reviews?.length     ?? '—', icon: Star,         to: '/admin/reviews' },
     { label: 'CV uploadé',   value: cv ? 'Oui' : 'Non',          icon: FileText,     to: '/admin/cv' },
   ]
 
+  const avgRating = reviews?.length
+    ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+    : null
+
   return (
     <AdminPage title="Tableau de bord">
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-10">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-10">
         {stats.map(({ label, value, icon: Icon, to }) => (
           <Link
             key={label}
@@ -28,6 +34,9 @@ export default function DashboardPage() {
             <div>
               <p className="text-ink-400 text-sm font-body mb-1">{label}</p>
               <p className="font-display font-bold text-white text-3xl">{value}</p>
+              {label === 'Avis clients' && avgRating && (
+                <p className="text-xs text-gold-light font-mono mt-1">★ {avgRating} / 5 moy.</p>
+              )}
             </div>
             <div className="w-10 h-10 rounded-xl bg-accent-500/15 border border-accent-500/20
                             flex items-center justify-center
@@ -45,6 +54,7 @@ export default function DashboardPage() {
             { to: '/admin/projects',    label: 'Gérer les projets',     icon: FolderKanban },
             { to: '/admin/experiences', label: 'Gérer les expériences', icon: Briefcase },
             { to: '/admin/skills',      label: 'Gérer les compétences', icon: Zap },
+            { to: '/admin/reviews',     label: 'Gérer les avis',        icon: Star },
             { to: '/admin/cv',          label: 'Gérer le CV',           icon: FileText },
           ].map(({ to, label, icon: Icon }) => (
             <Link

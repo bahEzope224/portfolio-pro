@@ -46,7 +46,7 @@ export default function ContactPage() {
         {/* Info cards */}
         <div className="lg:col-span-2 flex flex-col gap-5">
           {[
-            { icon: Mail,    label: 'Email',        value: 'bahibrahimatalibe@gmail.com' },
+            { icon: Mail,    label: 'Email',        value: 'contact@example.com' },
             { icon: MapPin,  label: 'Localisation', value: 'Paris, France' },
             { icon: Clock,   label: 'Disponibilité', value: 'Lun – Ven, 9h – 18h' },
           ].map(({ icon: Icon, label, value }) => (

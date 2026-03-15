@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { to: '/projects',    label: 'Projets' },
   { to: '/experiences', label: 'Expériences' },
   { to: '/skills',      label: 'Compétences' },
+  { to: '/reviews',     label: 'Avis' },
   { to: '/cv',          label: 'CV' },
   { to: '/contact',     label: 'Contact' },
 ]
@@ -32,7 +33,6 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-accent-500/20 border border-accent-500/30
                           flex items-center justify-center
@@ -44,7 +44,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map(({ to, label }) => (
             <NavLink
@@ -65,7 +64,6 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Mobile toggle */}
         <button
           className="md:hidden p-2 rounded-lg text-ink-300 hover:text-white
                      hover:bg-white/[0.06] transition-colors"
@@ -76,7 +74,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {open && (
         <div className="md:hidden absolute top-full inset-x-0
                         bg-ink-900/95 backdrop-blur-xl border-b border-white/[0.05]

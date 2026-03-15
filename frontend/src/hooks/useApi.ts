@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
-import type { Project, Experience, Skill, CV, ContactFormData } from '@/types'
+import type { Project, Experience, Skill, CV, ContactFormData, Review } from '@/types'
 
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 
@@ -137,3 +137,59 @@ export const useSendContact = () =>
   useMutation({
     mutationFn: (data: ContactFormData) => api.post('/contact/', data),
   })
+
+// ─── Reviews ─────────────────────────────────────────────────────────────
+
+export const useReviews = () =>
+  useQuery<Review[]>({
+    queryKey: ['reviews'],
+    queryFn: async () => (await api.get('/reviews/')).data,
+  })
+
+export const useAllReviews = () =>
+  useQuery<Review[]>({
+    queryKey: ['reviews', 'all'],
+    queryFn: async () => (await api.get('/reviews/admin/all')).data,
+  })
+
+export const useCreateReview = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (form: FormData) =>
+      api.post('/reviews/', form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+    },
+  })
+}
+
+export const useUpdateReview = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, form }: { id: number; form: FormData }) =>
+      api.put(`/reviews/${id}`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+    },
+  })
+}
+
+export const useToggleReviewVisibility = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.patch(`/reviews/${id}/toggle`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+    },
+  })
+}
+
+export const useDeleteReview = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/reviews/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+    },
+  })
+}
