@@ -302,6 +302,14 @@ export const useAllBlogPosts = () =>
     queryFn: async () => (await api.get('/blog/admin/all')).data,
   })
 
+// Fetch article complet par ID pour l'éditeur admin
+export const useAdminBlogPost = (id: number | undefined) =>
+  useQuery<BlogPost>({
+    queryKey: ['blog', 'admin', id],
+    queryFn: async () => (await api.get(`/blog/admin/${id}`)).data,
+    enabled: !!id,
+  })
+  
 export const useCreateBlogPost = () => {
   const qc = useQueryClient()
   return useMutation({

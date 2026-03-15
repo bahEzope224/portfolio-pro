@@ -293,3 +293,17 @@ def delete_post(
         delete_file(post.cover_path)
     db.delete(post)
     db.commit()
+
+
+
+@router.get("/admin/{post_id}", response_model=schemas.BlogPostOut)
+def get_post_by_id(
+    post_id: int,
+    db: Session = Depends(get_db),
+    _: models.AdminUser = Depends(get_current_user),
+):
+    """Retourne un article complet par ID pour l'éditeur admin."""
+    post = db.query(models.BlogPost).filter(models.BlogPost.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Article non trouvé")
+    return post
