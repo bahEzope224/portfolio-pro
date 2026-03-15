@@ -8,6 +8,9 @@ import uuid
 from pathlib import Path
 
 from fastapi import HTTPException, UploadFile, status
+from app.utils.storage import save_image, save_cv, delete_file
+
+__all__ = ["save_image", "save_cv", "delete_file"]
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_CV_TYPES    = {"application/pdf"}
