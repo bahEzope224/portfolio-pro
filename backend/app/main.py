@@ -1,16 +1,20 @@
-"""
-Portfolio Backend - FastAPI Application
-"""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 from app.database import engine, Base
 from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations
 
-Base.metadata.create_all(bind=engine)
+# Créer les tables — ne plante pas si la DB est indisponible
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("✅ Tables créées / vérifiées")
+except Exception as e:
+    logger.error(f"⚠️  Impossible de créer les tables : {e}")
 
 os.makedirs("uploads/images", exist_ok=True)
 os.makedirs("uploads/cv", exist_ok=True)
