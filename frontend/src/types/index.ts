@@ -78,3 +78,25 @@ export interface Review {
   created_at: string
   updated_at: string
 }
+
+export interface ReviewInvitation {
+  id: number
+  token: string
+  client_name: string
+  client_role: string
+  client_company?: string
+  client_email?: string
+  is_used: boolean
+  expires_at: string
+  created_at: string
+  review_id?: number
+  invite_url: string
+}
+
+export interface InvitationCheckResult {
+  valid: boolean
+  client_name: string
+  client_role: string
+  client_company?: string
+  expires_at: string
+}

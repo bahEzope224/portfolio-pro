@@ -204,3 +204,50 @@ class ReviewOut(ReviewBase):
 
     class Config:
         from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# Review Invitations
+# ---------------------------------------------------------------------------
+
+class InvitationCreate(BaseModel):
+    """Payload envoyé par l'admin pour créer un lien d'invitation."""
+    client_name:    str
+    client_role:    str
+    client_company: Optional[str] = None
+    client_email:   Optional[str] = None
+
+
+class InvitationOut(BaseModel):
+    id:             int
+    token:          str
+    client_name:    str
+    client_role:    str
+    client_company: Optional[str] = None
+    client_email:   Optional[str] = None
+    is_used:        bool
+    expires_at:     datetime
+    created_at:     datetime
+    review_id:      Optional[int] = None
+    invite_url:     Optional[str] = None   # construit côté router
+
+    class Config:
+        from_attributes = True
+
+
+class PublicReviewSubmit(BaseModel):
+    """Formulaire soumis par le client via son lien unique."""
+    content: str
+    rating:  int
+
+    @validator("rating")
+    def rating_range(cls, v):
+        if not 1 <= v <= 5:
+            raise ValueError("rating must be between 1 and 5")
+        return v
+
+    @validator("content")
+    def content_min(cls, v):
+        if len(v.strip()) < 10:
+            raise ValueError("L'avis doit faire au moins 10 caractères")
+        return v.strip()

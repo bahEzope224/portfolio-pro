@@ -17,6 +17,7 @@ Un portfolio personnel complet avec interface publique et panneau d'administrati
 | `/projects` | Grille de projets avec tech stack, liens GitHub/Live |
 | `/experiences` | Timeline chronologique des expériences |
 | `/skills` | Compétences groupées par catégorie avec barres de niveau |
+| `/review` | Avis de client et ou partenaire|
 | `/cv` | Preview PDF + bouton de téléchargement |
 | `/contact` | Formulaire de contact avec envoi d'email |
 

@@ -1,22 +1,26 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FolderKanban, Briefcase,
-  Zap, FileText, LogOut, Code2, Star,
+  Zap, FileText, LogOut, Code2, Star, Link2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { clearToken } from '@/store/auth'
+import { useAllReviews } from '@/hooks/useApi'
 
 const ADMIN_LINKS = [
-  { to: '/admin',             label: 'Dashboard',    icon: LayoutDashboard, end: true },
-  { to: '/admin/projects',    label: 'Projets',      icon: FolderKanban },
-  { to: '/admin/experiences', label: 'Expériences',  icon: Briefcase },
-  { to: '/admin/skills',      label: 'Compétences',  icon: Zap },
-  { to: '/admin/reviews',     label: 'Avis clients', icon: Star },
-  { to: '/admin/cv',          label: 'CV',           icon: FileText },
+  { to: '/admin',              label: 'Dashboard',      icon: LayoutDashboard, end: true },
+  { to: '/admin/projects',     label: 'Projets',        icon: FolderKanban },
+  { to: '/admin/experiences',  label: 'Expériences',    icon: Briefcase },
+  { to: '/admin/skills',       label: 'Compétences',    icon: Zap },
+  { to: '/admin/reviews',      label: 'Avis publiés',   icon: Star },
+  { to: '/admin/invitations',  label: 'Invitations',    icon: Link2 },
+  { to: '/admin/cv',           label: 'CV',             icon: FileText },
 ]
 
 export default function AdminLayout() {
   const navigate = useNavigate()
+  const { data: allReviews } = useAllReviews()
+  const pendingCount = allReviews?.filter((r) => !r.is_visible).length ?? 0
 
   const handleLogout = () => {
     clearToken()
@@ -51,8 +55,15 @@ export default function AdminLayout() {
                 )
               }
             >
-              <Icon className="w-4 h-4" />
-              {label}
+              <Icon className="w-4 h-4 shrink-0" />
+              <span className="flex-1">{label}</span>
+              {/* Badge pending reviews on Invitations link */}
+              {to === '/admin/invitations' && pendingCount > 0 && (
+                <span className="w-5 h-5 rounded-full bg-amber-500 text-ink-900
+                                 text-xs font-bold flex items-center justify-center shrink-0">
+                  {pendingCount}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -60,8 +71,7 @@ export default function AdminLayout() {
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                     text-ink-400 hover:text-red-400 hover:bg-red-500/10
-                     transition-all duration-200"
+                     text-ink-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
         >
           <LogOut className="w-4 h-4" />
           Déconnexion

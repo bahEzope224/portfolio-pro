@@ -1,6 +1,5 @@
 """
 Portfolio Backend - FastAPI Application
-Entry point for the portfolio API server.
 """
 
 from fastapi import FastAPI
@@ -9,19 +8,17 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from app.database import engine, Base
-from app.routers import projects, experiences, skills, cv, contact, auth, reviews
+from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations
 
-# Create all database tables
 Base.metadata.create_all(bind=engine)
 
-# Ensure upload directories exist
 os.makedirs("uploads/images", exist_ok=True)
 os.makedirs("uploads/cv", exist_ok=True)
 
 app = FastAPI(
     title="Portfolio API",
     description="Backend API for personal developer portfolio",
-    version="1.0.0",
+    version="1.1.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
 )
@@ -43,6 +40,7 @@ app.include_router(skills.router,      prefix="/api/skills",      tags=["Skills"
 app.include_router(cv.router,          prefix="/api/cv",          tags=["CV"])
 app.include_router(contact.router,     prefix="/api/contact",     tags=["Contact"])
 app.include_router(reviews.router,     prefix="/api/reviews",     tags=["Reviews"])
+app.include_router(invitations.router, prefix="/api/invitations", tags=["Invitations"])
 
 @app.get("/api/health", tags=["Health"])
 def health_check():

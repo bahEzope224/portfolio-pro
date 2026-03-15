@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Github, Linkedin, Twitter, Code2 } from 'lucide-react'
+import { Github, Linkedin, Code2 } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -9,7 +9,7 @@ export default function Footer() {
         <Link to="/" className="flex items-center gap-2">
           <Code2 className="w-5 h-5 text-accent-400" />
           <span className="font-display font-bold text-white">
-            dev<span className="text-accent-400">.</span>folio
+            dev<span className="text-accent-400">.</span>Bah
           </span>
         </Link>
 
@@ -19,9 +19,8 @@ export default function Footer() {
 
         <div className="flex items-center gap-4">
           {[
-            { href: 'https://github.com', icon: Github,   label: 'GitHub' },
-            { href: 'https://linkedin.com', icon: Linkedin, label: 'LinkedIn' },
-            { href: 'https://twitter.com',  icon: Twitter,  label: 'Twitter' },
+            { href: 'https://github.com/bahEzope224/', icon: Github,   label: 'GitHub' },
+            { href: 'https://www.linkedin.com/in/ibrahima-bah-8215261b9/', icon: Linkedin, label: 'LinkedIn' },
           ].map(({ href, icon: Icon, label }) => (
             <a
               key={label}

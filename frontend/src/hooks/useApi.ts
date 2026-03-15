@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
-import type { Project, Experience, Skill, CV, ContactFormData, Review } from '@/types'
+import type { Project, Experience, Skill, CV, ContactFormData, Review, ReviewInvitation, InvitationCheckResult } from '@/types'
 
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 
@@ -193,3 +193,64 @@ export const useDeleteReview = () => {
     },
   })
 }
+
+// ─── Invitations ──────────────────────────────────────────────────────────
+
+export const useInvitations = () =>
+  useQuery<ReviewInvitation[]>({
+    queryKey: ['invitations'],
+    queryFn: async () => (await api.get('/invitations/')).data,
+  })
+
+export const useCreateInvitation = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { client_name: string; client_role: string; client_company?: string; client_email?: string }) =>
+      api.post('/invitations/', data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invitations'] }),
+  })
+}
+
+export const useDeleteInvitation = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/invitations/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invitations'] }),
+  })
+}
+
+export const useApproveReview = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (reviewId: number) => api.post(`/invitations/approve/${reviewId}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+      qc.invalidateQueries({ queryKey: ['invitations'] })
+    },
+  })
+}
+
+export const useRejectReview = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (reviewId: number) => api.delete(`/invitations/reject/${reviewId}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reviews'] })
+      qc.invalidateQueries({ queryKey: ['invitations'] })
+    },
+  })
+}
+
+export const useCheckInvitation = (token: string) =>
+  useQuery<InvitationCheckResult>({
+    queryKey: ['invitation-check', token],
+    queryFn: async () => (await api.get(`/invitations/${token}/check`)).data,
+    enabled: !!token,
+    retry: false,
+  })
+
+export const useSubmitReview = () =>
+  useMutation({
+    mutationFn: ({ token, content, rating }: { token: string; content: string; rating: number }) =>
+      api.post(`/invitations/${token}/submit`, { content, rating }),
+  })

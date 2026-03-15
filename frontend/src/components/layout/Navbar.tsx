@@ -40,7 +40,7 @@ export default function Navbar() {
             <Code2 className="w-4 h-4 text-accent-400" />
           </div>
           <span className="font-display font-bold text-white text-lg tracking-tight">
-            dev<span className="text-accent-400">.</span>folio
+            dev<span className="text-accent-400">.</span>Bah
           </span>
         </Link>
 

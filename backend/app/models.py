@@ -92,3 +92,25 @@ class Review(Base):
     order       = Column(Integer, default=0)
     created_at  = Column(DateTime, default=datetime.utcnow)
     updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class ReviewInvitation(Base):
+    """
+    Token d'invitation unique envoyé à un client pour soumettre un avis.
+    Le token expire après 7 jours ou dès qu'il est utilisé.
+    """
+    __tablename__ = "review_invitations"
+
+    id            = Column(Integer, primary_key=True, index=True)
+    token         = Column(String(128), unique=True, index=True, nullable=False)
+    # Info pré-remplie par l'admin (facilite le formulaire client)
+    client_name   = Column(String(150), nullable=False)
+    client_role   = Column(String(150), nullable=False)
+    client_company= Column(String(150), nullable=True)
+    client_email  = Column(String(200), nullable=True)
+    # Statut
+    is_used       = Column(Boolean, default=False)   # True dès soumission
+    expires_at    = Column(DateTime, nullable=False)
+    created_at    = Column(DateTime, default=datetime.utcnow)
+    # Lien vers l'avis créé après soumission (nullable jusqu'à soumission)
+    review_id     = Column(Integer, nullable=True)   # FK vers reviews.id

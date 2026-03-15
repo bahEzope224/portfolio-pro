@@ -32,10 +32,17 @@ export default function HomePage() {
               <span className="gradient-text">Full Stack</span>
             </h1>
 
-            <p className="text-ink-300 text-lg leading-relaxed mb-10 max-w-lg
-                          animate-fade-up [animation-delay:200ms] opacity-0">
-              Je crée des expériences web modernes, performantes et accessibles.
-              Passionné par le code propre et les interfaces soignées.
+            <p className="text-ink-300 text-lg leading-relaxed mb-3 max-w-lg
+                animate-fade-up [animation-delay:200ms] opacity-0">
+              Entre une idée griffonnée sur papier et une app utilisée par des milliers
+              de personnes, il y a exactement{' '}
+              <em className="text-white not-italic font-medium">une conversation.</em>
+            </p>
+            <p className="text-ink-400 text-base leading-relaxed mb-10 max-w-lg
+                animate-fade-up [animation-delay:250ms] opacity-0">
+              Je transforme des exigences complexes en interfaces qui{' '}
+              <em className="text-ink-200 not-italic">semblent</em> évidentes —
+              parce que le meilleur code, on ne le voit pas.
             </p>
 
             <div className="flex flex-wrap gap-4 animate-fade-up [animation-delay:300ms] opacity-0">
@@ -53,8 +60,8 @@ export default function HomePage() {
             <div className="flex items-center gap-4 mt-10
                             animate-fade-up [animation-delay:400ms] opacity-0">
               {[
-                { href: 'https://github.com', icon: Github, label: 'GitHub' },
-                { href: 'https://linkedin.com', icon: Linkedin, label: 'LinkedIn' },
+                { href: 'https://github.com/bahEzope224/', icon: Github, label: 'GitHub' },
+                { href: 'https://www.linkedin.com/in/ibrahima-bah-8215261b9/', icon: Linkedin, label: 'LinkedIn' },
               ].map(({ href, icon: Icon, label }) => (
                 <a
                   key={label}
