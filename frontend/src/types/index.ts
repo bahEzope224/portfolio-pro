@@ -1,0 +1,65 @@
+// ─── Shared API types matching backend schemas ───────────────────────────
+
+export interface Project {
+  id: number
+  title: string
+  description: string
+  tech_stack: string[]
+  github_url?: string
+  live_url?: string
+  image_path?: string
+  is_featured: boolean
+  order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Experience {
+  id: number
+  company: string
+  position: string
+  start_date: string   // "YYYY-MM"
+  end_date?: string    // null = Present
+  description: string
+  logo_path?: string
+  location?: string
+  order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Skill {
+  id: number
+  name: string
+  category: string
+  level: number       // 0–100
+  icon?: string
+  order: number
+  created_at: string
+}
+
+export interface CV {
+  id: number
+  filename: string
+  file_path: string
+  upload_date: string
+}
+
+export interface AdminUser {
+  id: number
+  username: string
+  email: string
+  is_active: boolean
+}
+
+export interface Token {
+  access_token: string
+  token_type: string
+}
+
+export interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}

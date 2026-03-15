@@ -1,0 +1,139 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import api from '@/lib/api'
+import type { Project, Experience, Skill, CV, ContactFormData } from '@/types'
+
+const BASE = import.meta.env.VITE_API_URL ?? '/api'
+
+// ─── Projects ────────────────────────────────────────────────────────────
+
+export const useProjects = () =>
+  useQuery<Project[]>({
+    queryKey: ['projects'],
+    queryFn: async () => (await api.get('/projects/')).data,
+  })
+
+export const useCreateProject = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (form: FormData) => api.post('/projects/', form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
+  })
+}
+
+export const useUpdateProject = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, form }: { id: number; form: FormData }) =>
+      api.put(`/projects/${id}`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
+  })
+}
+
+export const useDeleteProject = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/projects/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
+  })
+}
+
+// ─── Experiences ─────────────────────────────────────────────────────────
+
+export const useExperiences = () =>
+  useQuery<Experience[]>({
+    queryKey: ['experiences'],
+    queryFn: async () => (await api.get('/experiences/')).data,
+  })
+
+export const useCreateExperience = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (form: FormData) => api.post('/experiences/', form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['experiences'] }),
+  })
+}
+
+export const useUpdateExperience = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, form }: { id: number; form: FormData }) =>
+      api.put(`/experiences/${id}`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['experiences'] }),
+  })
+}
+
+export const useDeleteExperience = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/experiences/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['experiences'] }),
+  })
+}
+
+// ─── Skills ──────────────────────────────────────────────────────────────
+
+export const useSkills = () =>
+  useQuery<Skill[]>({
+    queryKey: ['skills'],
+    queryFn: async () => (await api.get('/skills/')).data,
+  })
+
+export const useCreateSkill = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: Omit<Skill, 'id' | 'created_at'>) => api.post('/skills/', data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['skills'] }),
+  })
+}
+
+export const useUpdateSkill = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Partial<Skill> }) =>
+      api.put(`/skills/${id}`, data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['skills'] }),
+  })
+}
+
+export const useDeleteSkill = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/skills/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['skills'] }),
+  })
+}
+
+// ─── CV ──────────────────────────────────────────────────────────────────
+
+export const useCV = () =>
+  useQuery<CV | null>({
+    queryKey: ['cv'],
+    queryFn: async () => {
+      const res = await api.get('/cv/')
+      return res.data ?? null
+    },
+  })
+
+export const useUploadCV = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (form: FormData) =>
+      api.post('/cv/', form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['cv'] }),
+  })
+}
+
+export const useDeleteCV = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => api.delete('/cv/'),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['cv'] }),
+  })
+}
+
+// ─── Contact ─────────────────────────────────────────────────────────────
+
+export const useSendContact = () =>
+  useMutation({
+    mutationFn: (data: ContactFormData) => api.post('/contact/', data),
+  })

@@ -1,0 +1,165 @@
+"""
+Pydantic schemas for request/response validation.
+"""
+
+from __future__ import annotations
+from datetime import datetime
+from typing import List, Optional
+from pydantic import BaseModel, EmailStr, HttpUrl, validator
+
+
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class AdminUserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+
+class AdminUserOut(BaseModel):
+    id: int
+    username: str
+    email: str
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# Projects
+# ---------------------------------------------------------------------------
+
+class ProjectBase(BaseModel):
+    title: str
+    description: str
+    tech_stack: List[str] = []
+    github_url: Optional[str] = None
+    live_url: Optional[str] = None
+    is_featured: bool = False
+    order: int = 0
+
+
+class ProjectCreate(ProjectBase):
+    pass
+
+
+class ProjectUpdate(ProjectBase):
+    title: Optional[str] = None
+    description: Optional[str] = None
+
+
+class ProjectOut(ProjectBase):
+    id: int
+    image_path: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# Experiences
+# ---------------------------------------------------------------------------
+
+class ExperienceBase(BaseModel):
+    company: str
+    position: str
+    start_date: str        # "YYYY-MM"
+    end_date: Optional[str] = None
+    description: str
+    location: Optional[str] = None
+    order: int = 0
+
+
+class ExperienceCreate(ExperienceBase):
+    pass
+
+
+class ExperienceUpdate(ExperienceBase):
+    company: Optional[str] = None
+    position: Optional[str] = None
+    start_date: Optional[str] = None
+    description: Optional[str] = None
+
+
+class ExperienceOut(ExperienceBase):
+    id: int
+    logo_path: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# Skills
+# ---------------------------------------------------------------------------
+
+class SkillBase(BaseModel):
+    name: str
+    category: str
+    level: int = 50
+    icon: Optional[str] = None
+    order: int = 0
+
+    @validator("level")
+    def level_range(cls, v):
+        if not 0 <= v <= 100:
+            raise ValueError("level must be between 0 and 100")
+        return v
+
+
+class SkillCreate(SkillBase):
+    pass
+
+
+class SkillUpdate(SkillBase):
+    name: Optional[str] = None
+    category: Optional[str] = None
+
+
+class SkillOut(SkillBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# CV
+# ---------------------------------------------------------------------------
+
+class CVOut(BaseModel):
+    id: int
+    filename: str
+    file_path: str
+    upload_date: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---------------------------------------------------------------------------
+# Contact
+# ---------------------------------------------------------------------------
+
+class ContactMessage(BaseModel):
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
