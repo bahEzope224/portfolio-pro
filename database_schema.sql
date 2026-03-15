@@ -121,22 +121,6 @@ CREATE INDEX IF NOT EXISTS ix_reviews_is_visible ON reviews(is_visible);
 CREATE INDEX IF NOT EXISTS ix_reviews_rating     ON reviews(rating);
 
 
--- =============================================================================
---  DONNÉES DE DÉMO — à adapter / supprimer en production
--- =============================================================================
-
--- ---------------------------------------------------------------------------
--- Admin (mot de passe : "admin123" hashé en bcrypt)
--- ⚠ Changez ce hash IMMÉDIATEMENT en production via POST /api/auth/register
--- ---------------------------------------------------------------------------
-INSERT OR IGNORE INTO admin_users (username, email, hashed_password, is_active)
-VALUES (
-    'admin',
-    'admin@portfolio.dev',
-    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/R.7GRqfRe',
-    1
-);
-
 
 -- ---------------------------------------------------------------------------
 -- Projets
