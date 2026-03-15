@@ -104,12 +104,12 @@ export function EmptyState({ message }: { message: string }) {
                       flex items-center justify-center mb-4">
         <span className="text-2xl">✦</span>
       </div>
-      <p className="font-body">{message}</p>
+      <p className="font-body text-center px-4">{message}</p>
     </div>
   )
 }
 
-// ─── Admin page wrapper ───────────────────────────────────────────────────
+// ─── Admin page wrapper — responsive ─────────────────────────────────────
 
 export function AdminPage({
   title,
@@ -121,10 +121,14 @@ export function AdminPage({
   children: ReactNode
 }) {
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-display font-bold text-white">{title}</h1>
-        {action}
+    <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
+      {/* Header — stacks on mobile */}
+      <div className="flex flex-col sm:flex-row sm:items-center
+                      sm:justify-between gap-3 mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-display font-bold text-white">
+          {title}
+        </h1>
+        {action && <div className="self-start sm:self-auto">{action}</div>}
       </div>
       {children}
     </div>
@@ -135,7 +139,7 @@ export function AdminPage({
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('glass rounded-2xl p-6', className)}>
+    <div className={cn('glass rounded-2xl p-4 sm:p-6', className)}>
       {children}
     </div>
   )
