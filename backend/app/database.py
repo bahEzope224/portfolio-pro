@@ -1,8 +1,3 @@
-"""
-Database configuration - SQLAlchemy + SQLite.
-Easily switchable to PostgreSQL via DATABASE_URL env variable.
-"""
-
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,16 +5,28 @@ from sqlalchemy.orm import sessionmaker
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./portfolio.db")
 
-# SQLite needs connect_args; other DBs don't
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+# Corriger le préfixe postgres:// → postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
+# Options de connexion
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+    engine = create_engine(DATABASE_URL, connect_args=connect_args)
+else:
+    # PostgreSQL / Supabase — SSL requis
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"sslmode": "require"},
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10,
+    )
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-
 def get_db():
-    """FastAPI dependency that provides a DB session per request."""
     db = SessionLocal()
     try:
         yield db
