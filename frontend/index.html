@@ -1,24 +1,63 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Portfolio personnel – Développeur Web Full Stack" />
-    <meta name="theme-color" content="#7C6AF7" />
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-
-    <title>Portfolio — Développeur Web</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Amélioration SEO : Description meta plus détaillée et optimisée pour les moteurs de recherche -->
+  <meta name="description" content="Portfolio personnel de Nomad Developer, développeur web full stack spécialisé en React, Node.js, APIRest et solutions web modernes. Découvrez mes projets, compétences et expériences." />
+  <meta name="theme-color" content="#7C6AF7" />
+  
+  <!-- Amélioration SEO : Ajout de meta keywords (optionnel, mais utile pour certains moteurs ; évitez le stuffing) -->
+  <meta name="keywords" content="développeur web full stack, portfolio développeur, React, Node.js et APIRest, freelance développeur, Nomad Developer" />
+  
+  <!-- Amélioration SEO : Meta robots pour indiquer aux crawlers d'indexer la page -->
+  <meta name="robots" content="index, follow" />
+  
+  <!-- Amélioration SEO : Open Graph pour un meilleur partage sur les réseaux sociaux (Facebook, LinkedIn, etc.) -->
+  <meta property="og:title" content="Portfolio — Nomad Developer" />
+  <meta property="og:description" content="Portfolio personnel de Nomad Developer, développeur web full stack. Découvrez mes projets et compétences en développement web." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://portfolio-pro-livid-two.vercel.app/" /> <!-- Remplacez par l'URL réelle de votre site -->
+  <meta property="og:image" content="/src/components/img/img-index.png" /> <!-- Ajoutez une image optimisée (1200x630 px recommandé) -->
+  <meta property="og:site_name" content="Nomad Developer Portfolio" />
+  <meta property="og:locale" content="fr_FR" />
+  
+  <!-- Amélioration SEO : Twitter Cards pour un meilleur affichage sur X (Twitter) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Portfolio — Nomad Developer" />
+  <meta name="twitter:description" content="Portfolio personnel de Nomad Developer, développeur web full stack. Découvrez mes projets et compétences." />
+  <meta name="twitter:image" content="https://www.votresite.com/twitter-image.jpg" /> <!-- Image optimisée (1200x675 px recommandé) -->
+  <meta name="twitter:site" content="@votrehandle" /> <!-- Remplacez par votre handle Twitter si applicable -->
+  
+  <!-- Amélioration SEO : Lien canonique pour éviter le duplicate content -->
+  <link rel="canonical" href="https://www.votresite.com/" /> <!-- Remplacez par l'URL réelle -->
+  
+  <!-- Google Fonts (inchangé, mais assurez-vous que les fonts sont optimisées pour la performance) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Amélioration SEO : Ajout de structured data (Schema.org) en JSON-LD pour un meilleur référencement (Person pour un portfolio) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nomad Developer",
+    "jobTitle": "Développeur Web Full Stack",
+    "url": "https://www.votresite.com/",
+    "sameAs": [
+      "https://www.linkedin.com/in/votreprofil",
+      "https://github.com/votrepseudo"
+    ],
+    "description": "Développeur web full stack nomade, spécialisé en technologies modernes comme React, Node.js et APIRest"
+  }
+  </script>
+  
+  <title>Portfolio — Nomad Developer</title> 
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
 </html>
