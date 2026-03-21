@@ -19,6 +19,10 @@ R2_PUBLIC_URL       = os.getenv("R2_PUBLIC_URL", "")   # https://pub-xxxx.r2.dev
 
 USE_R2 = bool(R2_ACCOUNT_ID and R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY)
 
+import logging as _logging
+_logger2 = _logging.getLogger(__name__)
+_logger2.warning(f"[R2_DEBUG] ACCOUNT_ID='{R2_ACCOUNT_ID[:4] if R2_ACCOUNT_ID else 'VIDE'}' ACCESS_KEY='{R2_ACCESS_KEY_ID[:4] if R2_ACCESS_KEY_ID else 'VIDE'}' SECRET='{R2_SECRET_ACCESS_KEY[:4] if R2_SECRET_ACCESS_KEY else 'VIDE'}' USE_R2={USE_R2}")
+
 import logging
 _logger = logging.getLogger(__name__)
 _logger.info(f"[STORAGE] USE_R2={USE_R2} | BUCKET={R2_BUCKET_NAME} | PUBLIC_URL={R2_PUBLIC_URL} | ACCOUNT={R2_ACCOUNT_ID[:6] if R2_ACCOUNT_ID else 'VIDE'}")
