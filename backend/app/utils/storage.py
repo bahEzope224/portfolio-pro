@@ -19,6 +19,10 @@ R2_PUBLIC_URL       = os.getenv("R2_PUBLIC_URL", "")   # https://pub-xxxx.r2.dev
 
 USE_R2 = bool(R2_ACCOUNT_ID and R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY)
 
+import logging
+_logger = logging.getLogger(__name__)
+_logger.info(f"[STORAGE] USE_R2={USE_R2} | BUCKET={R2_BUCKET_NAME} | PUBLIC_URL={R2_PUBLIC_URL} | ACCOUNT={R2_ACCOUNT_ID[:6] if R2_ACCOUNT_ID else 'VIDE'}")
+
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_CV_TYPES    = {"application/pdf"}
 MAX_IMAGE_SIZE      = 5  * 1024 * 1024   # 5 MB
