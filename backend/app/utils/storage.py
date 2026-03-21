@@ -21,7 +21,7 @@ USE_R2 = bool(R2_ACCOUNT_ID and R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY)
 
 import logging as _logging
 _logger2 = _logging.getLogger(__name__)
-_logger2.warning(f"[R2_DEBUG] ACCOUNT_ID='{R2_ACCOUNT_ID[:4] if R2_ACCOUNT_ID else 'VIDE'}' ACCESS_KEY='{R2_ACCESS_KEY_ID[:4] if R2_ACCESS_KEY_ID else 'VIDE'}' SECRET='{R2_SECRET_ACCESS_KEY[:4] if R2_SECRET_ACCESS_KEY else 'VIDE'}' USE_R2={USE_R2}")
+print(f"[R2_DEBUG] ACCOUNT='{R2_ACCOUNT_ID[:4] if R2_ACCOUNT_ID else 'VIDE'}' KEY='{R2_ACCESS_KEY_ID[:4] if R2_ACCESS_KEY_ID else 'VIDE'}' SECRET='{R2_SECRET_ACCESS_KEY[:4] if R2_SECRET_ACCESS_KEY else 'VIDE'}' USE_R2={USE_R2}", flush=True)
 
 import logging
 _logger = logging.getLogger(__name__)
