@@ -28,7 +28,7 @@ app = FastAPI(
 raw_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
 allow_origins = [o.strip() for o in raw_origins.split(",")]
 
-app.a(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
     allow_credentials=True,
