@@ -19,13 +19,7 @@ R2_PUBLIC_URL       = os.getenv("R2_PUBLIC_URL", "")   # https://pub-xxxx.r2.dev
 
 USE_R2 = bool(R2_ACCOUNT_ID and R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY)
 
-import logging as _logging
-_logger2 = _logging.getLogger(__name__)
-print(f"[R2_DEBUG] ACCOUNT='{R2_ACCOUNT_ID[:4] if R2_ACCOUNT_ID else 'VIDE'}' KEY='{R2_ACCESS_KEY_ID[:4] if R2_ACCESS_KEY_ID else 'VIDE'}' SECRET='{R2_SECRET_ACCESS_KEY[:4] if R2_SECRET_ACCESS_KEY else 'VIDE'}' USE_R2={USE_R2}", flush=True)
 
-import logging
-_logger = logging.getLogger(__name__)
-_logger.info(f"[STORAGE] USE_R2={USE_R2} | BUCKET={R2_BUCKET_NAME} | PUBLIC_URL={R2_PUBLIC_URL} | ACCOUNT={R2_ACCOUNT_ID[:6] if R2_ACCOUNT_ID else 'VIDE'}")
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_CV_TYPES    = {"application/pdf"}
@@ -106,9 +100,7 @@ def save_file(
 
     if USE_R2:
         key = f"{folder}/{unique_name}"
-        _logger.info(f"[R2] Uploading {key} to R2...")
         url = _upload_to_r2(content, key, upload.content_type)
-        _logger.info(f"[R2] Success: {url}")
         return url
     else:
         return _save_local(content, folder, ext)
