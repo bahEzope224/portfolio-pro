@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { Menu, X, Code2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 
-const NAV_LINKS = [
-  { to: '/',            label: 'Accueil' },
-  { to: '/projects',    label: 'Projets' },
-  { to: '/experiences', label: 'Expériences' },
-  { to: '/skills',      label: 'Compétences' },
-  { to: '/reviews',     label: 'Avis' },
-  { to: '/cv',          label: 'CV' },
-  { to: '/contact',     label: 'Contact' },
-  { to: '/blog', label: 'Blog' },
-]
-
 export default function Navbar() {
+  const { t, i18n } = useTranslation()
   const [open,     setOpen]     = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -23,6 +14,24 @@ export default function Navbar() {
     window.addEventListener('scroll', handler)
     return () => window.removeEventListener('scroll', handler)
   }, [])
+
+  const toggleLang = () => {
+    i18n.changeLanguage(i18n.language.startsWith('fr') ? 'en' : 'fr')
+  }
+
+  const NAV_LINKS = [
+    { to: '/',            label: t('nav.home') },
+    { to: '/projects',    label: t('nav.projects') },
+    { to: '/experiences', label: t('nav.experiences') },
+    { to: '/skills',      label: t('nav.skills') },
+    { to: '/reviews',     label: t('nav.reviews') },
+    { to: '/cv',          label: t('nav.cv') },
+    { to: '/contact',     label: t('nav.contact') },
+    { to: '/blog',        label: t('nav.blog') },
+  ]
+
+  const currentLang = i18n.language.startsWith('fr') ? 'FR' : 'EN'
+  const nextLang    = i18n.language.startsWith('fr') ? 'EN' : 'FR'
 
   return (
     <header
@@ -63,16 +72,42 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
+
+          {/* Language switcher */}
+          <button
+            onClick={toggleLang}
+            aria-label={`Switch to ${nextLang}`}
+            className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                       border border-white/[0.08] bg-white/[0.03]
+                       text-xs font-mono font-semibold text-ink-300
+                       hover:text-white hover:border-accent-500/40 hover:bg-accent-500/10
+                       transition-all duration-200"
+          >
+            <span className="text-base leading-none">
+              {i18n.language.startsWith('fr') ? '🇫🇷' : '🇬🇧'}
+            </span>
+            {currentLang}
+          </button>
         </nav>
 
-        <button
-          className="md:hidden p-2 rounded-lg text-ink-300 hover:text-white
-                     hover:bg-white/[0.06] transition-colors"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggleLang}
+            aria-label={`Switch to ${nextLang}`}
+            className="p-2 rounded-lg text-ink-300 hover:text-white
+                       hover:bg-white/[0.06] transition-colors text-xs font-mono font-semibold"
+          >
+            {i18n.language.startsWith('fr') ? '🇫🇷' : '🇬🇧'}
+          </button>
+          <button
+            className="p-2 rounded-lg text-ink-300 hover:text-white
+                       hover:bg-white/[0.06] transition-colors"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
