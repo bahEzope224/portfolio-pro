@@ -24,7 +24,8 @@ router = APIRouter()
 
 # ---------------------------------------------------------------------------
 # Helpers
-# -----------------------------------------------------------------f slugify(text_: str) -> str:
+# ---------------------------------------------------------------------------
+def slugify(text_: str) -> str:
     text_ = unicodedata.normalize("NFKD", text_)
     text_ = text_.encode("ascii", "ignore").decode("ascii")
     text_ = text_.lower().strip()
