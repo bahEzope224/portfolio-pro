@@ -3,15 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 import logging
-
 logger = logging.getLogger(__name__)
-
 from app.database import engine, Base
-from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations
 from app.routers import projects, experiences, skills, cv, contact, auth, reviews, invitations, blog
 
-
-# Créer les tables — ne plante pas si la DB est indisponible
 try:
     Base.metadata.create_all(bind=engine)
     logger.info("✅ Tables créées / vérifiées")
@@ -29,16 +24,19 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-app.add_middleware(
+# Récupère les origines depuis les variables d'environnement
+raw_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
+allow_origins = [o.strip() for o in raw_origins.split(",")]
+
+app.a(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:5173")],
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-
 app.include_router(auth.router,        prefix="/api/auth",        tags=["Auth"])
 app.include_router(projects.router,    prefix="/api/projects",    tags=["Projects"])
 app.include_router(experiences.router, prefix="/api/experiences", tags=["Experiences"])
@@ -47,8 +45,7 @@ app.include_router(cv.router,          prefix="/api/cv",          tags=["CV"])
 app.include_router(contact.router,     prefix="/api/contact",     tags=["Contact"])
 app.include_router(reviews.router,     prefix="/api/reviews",     tags=["Reviews"])
 app.include_router(invitations.router, prefix="/api/invitations", tags=["Invitations"])
-app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
-
+app.include_router(blog.router,        prefix="/api/blog",        tags=["Blog"])
 
 @app.get("/api/health", tags=["Health"])
 def health_check():
