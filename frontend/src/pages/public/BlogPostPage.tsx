@@ -3,6 +3,7 @@ import { Clock, Eye, ArrowLeft, Tag, Calendar, BookOpen } from 'lucide-react'
 import { useBlogPost } from '@/hooks/useApi'
 import { Spinner, Badge } from '@/components/ui'
 import { assetUrl } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 // ── Simple Markdown renderer ──────────────────────────────────────────────
 // Convertit le Markdown en HTML basique sans dépendance externe

@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { Star, Send, CheckCircle, XCircle, Clock, Loader2 } from 'lucide-react'
 import { useCheckInvitation, useSubmitReview } from '@/hooks/useApi'
 import { Button } from '@/components/ui'
+import { useTranslation } from 'react-i18next'
+
 
 // ── Star picker ───────────────────────────────────────────────────────────
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
