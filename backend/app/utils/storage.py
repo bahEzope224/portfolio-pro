@@ -17,7 +17,7 @@ R2_SECRET_ACCESS_KEY= os.getenv("R2_SECRET_ACCESS_KEY", "")
 R2_BUCKET_NAME      = os.getenv("R2_BUCKET_NAME", "portfolio-uploads")
 R2_PUBLIC_URL       = os.getenv("R2_PUBLIC_URL", "")   # https://pub-xxxx.r2.dev
 
-USE_R2 = True  # FORCED FOR DEBUG
+USE_R2 = bool(R2_ACCOUNT_ID and R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY)
 
 import logging as _logging
 _logger2 = _logging.getLogger(__name__)
