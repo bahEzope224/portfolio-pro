@@ -102,7 +102,10 @@ def save_file(
 
     if USE_R2:
         key = f"{folder}/{unique_name}"
-        return _upload_to_r2(content, key, upload.content_type)
+        _logger.info(f"[R2] Uploading {key} to R2...")
+        url = _upload_to_r2(content, key, upload.content_type)
+        _logger.info(f"[R2] Success: {url}")
+        return url
     else:
         return _save_local(content, folder, ext)
 
