@@ -8,7 +8,7 @@ function SkillCard({ skill }: { skill: Skill }) {
     <div className="glass glass-hover rounded-xl p-4">
       <div className="flex items-center justify-between mb-2">
         <span className="font-body font-medium text-white text-sm">{skill.name}</span>
-        <span className="text-xs font-mono text-ink-400">{skill.level}%</span>
+        <span className="text-xs font-mono">{skill.level}%</span>
       </div>
       <div className="skill-bar">
         <div className="skill-bar-fill" style={{ width: `${skill.level}%` }} />
@@ -42,7 +42,7 @@ export default function SkillsPage() {
           {Object.entries(grouped).map(([category, items], ci) => (
             <div key={category} className="animate-fade-up opacity-0"
                  style={{ animationDelay: `${ci * 100}ms` }}>
-              <h3 className="font-display font-bold text-white text-xl mb-5 flex items-center gap-3">
+              <h3 className="font-display font-bold text-xl mb-5 flex items-center gap-3">
                 <span className="w-8 h-px bg-accent-500" />
                 {category}
               </h3>

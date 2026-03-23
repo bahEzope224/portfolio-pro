@@ -12,7 +12,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'Géopolitique':          'bg-red-500/15 text-red-300 border-red-500/20',
   'Data Science':          'bg-blue-500/15 text-blue-300 border-blue-500/20',
   'Nouvelles Technologies':'bg-teal-500/15 text-teal-300 border-teal-500/20',
-  'Général':               'bg-ink-700 text-ink-300 border-white/10',
+  'Général':               'bg-ink-700 border-white/10',
 }
 function getCategoryColor(cat: string) {
   return CATEGORY_COLORS[cat] ?? 'bg-accent-500/15 text-accent-300 border-accent-500/20'
@@ -51,7 +51,7 @@ function PostCard({ post, index }: { post: BlogPostSummary; index: number }) {
             {post.tags.slice(0, 3).map((tag) => <Badge key={tag} label={tag} />)}
           </div>
         )}
-        <div className="flex items-center gap-4 text-xs text-ink-500 font-mono
+        <div className="flex items-center gap-4 text-xs font-mono
                         border-t border-white/[0.05] pt-3 mt-auto">
           <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.reading_time} min</span>
           <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{post.views} {t('blog.views')}</span>
@@ -81,7 +81,7 @@ export default function BlogPage() {
       <SectionHeading tag={t('blog.tag')} title={t('blog.title')} subtitle={t('blog.subtitle')} />
       <div className="flex flex-col gap-4 mb-10">
         <div className="relative max-w-lg">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" />
           <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
                  placeholder={t('blog.searchPlaceholder')} className="input-field pl-11" />
         </div>

@@ -87,7 +87,7 @@ export default function BlogPostPage() {
         <div className="absolute top-24 left-0 right-0 z-20 max-w-3xl mx-auto px-6">
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-ink-400 hover:text-white
+            className="inline-flex items-center gap-2 hover:text-white
                        text-sm font-mono transition-colors duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -105,16 +105,16 @@ export default function BlogPostPage() {
           <span className={`px-3 py-1 rounded-full text-xs font-mono border ${categoryColor}`}>
             {post.category}
           </span>
-          <span className="flex items-center gap-1.5 text-xs text-ink-500 font-mono">
+          <span className="flex items-center gap-1.5 text-xs font-mono">
             <Clock className="w-3.5 h-3.5" />
             {post.reading_time} min de lecture
           </span>
-          <span className="flex items-center gap-1.5 text-xs text-ink-500 font-mono">
+          <span className="flex items-center gap-1.5 text-xs font-mono">
             <Eye className="w-3.5 h-3.5" />
             {post.views} vues
           </span>
           {post.published_at && (
-            <span className="flex items-center gap-1.5 text-xs text-ink-500 font-mono">
+            <span className="flex items-center gap-1.5 text-xs font-mono">
               <Calendar className="w-3.5 h-3.5" />
               {new Date(post.published_at).toLocaleDateString('fr-FR', {
                 day: 'numeric', month: 'long', year: 'numeric',

@@ -54,7 +54,7 @@ export default function ContactPage() {
                 <Icon className="w-5 h-5 text-accent-400" />
               </div>
               <div>
-                <p className="text-xs text-ink-400 font-mono uppercase tracking-wide mb-0.5">{label}</p>
+                <p className="text-xs font-mono uppercase tracking-wide mb-0.5">{label}</p>
                 <p className="text-white font-body font-medium text-sm">{value}</p>
               </div>
             </div>
@@ -64,14 +64,14 @@ export default function ContactPage() {
               className="lg:col-span-3 glass rounded-2xl p-8 flex flex-col gap-5">
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-2">
+              <label className="block text-xs font-mono uppercase tracking-wide mb-2">
                 {t('contact.labelName')}
               </label>
               <input {...register('name')} placeholder={t('contact.placeholderName')} className="input-field" />
               {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-2">
+              <label className="block text-xs font-mono uppercase tracking-wide mb-2">
                 {t('contact.labelEmail')}
               </label>
               <input {...register('email')} type="email" placeholder={t('contact.placeholderEmail')} className="input-field" />
@@ -79,14 +79,14 @@ export default function ContactPage() {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-mono uppercase tracking-wide mb-2">
               {t('contact.labelSubject')}
             </label>
             <input {...register('subject')} placeholder={t('contact.placeholderSubject')} className="input-field" />
             {errors.subject && <p className="text-red-400 text-xs mt-1">{errors.subject.message}</p>}
           </div>
           <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-mono uppercase tracking-wide mb-2">
               {t('contact.labelMessage')}
             </label>
             <textarea {...register('message')} rows={6} placeholder={t('contact.placeholderMessage')} className="input-field resize-none" />

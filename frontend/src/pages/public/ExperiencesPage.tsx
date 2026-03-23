@@ -39,16 +39,16 @@ export default function ExperiencesPage() {
                 <div className="flex-1 glass glass-hover rounded-2xl p-6">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                     <div>
-                      <h3 className="font-display font-bold text-white text-xl">{exp.position}</h3>
-                      <p className="text-accent-400 font-medium">{exp.company}</p>
+                      <h3 className="font-display font-bold text-xl">{exp.position}</h3>
+                      <p className="font-medium" style={{ color: "var(--accent)" }}>{exp.company}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-mono text-ink-300">
+                      <p className="text-sm font-mono">
                         {formatMonthYear(exp.start_date)} →{' '}
                         {exp.end_date ? formatMonthYear(exp.end_date) : t('experiences.present')}
                       </p>
                       {exp.location && (
-                        <p className="flex items-center justify-end gap-1 text-xs text-ink-500 mt-1">
+                        <p className="flex items-center justify-end gap-1 text-xs mt-1">
                           <MapPin className="w-3 h-3" />{exp.location}
                         </p>
                       )}

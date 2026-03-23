@@ -33,7 +33,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
           </button>
         ))}
       </div>
-      <p className="text-sm font-mono text-ink-400 h-5 transition-all">
+      <p className="text-sm font-mono h-5 transition-all">
         {labels[hovered || value] ?? ''}
       </p>
     </div>
@@ -159,7 +159,7 @@ export default function ReviewFormPage() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               {/* Pre-filled author info */}
               <div className="bg-ink-800/50 rounded-2xl p-4 border border-white/[0.05]">
-                <p className="text-xs font-mono text-ink-500 uppercase tracking-wide mb-2">
+                <p className="text-xs font-mono uppercase tracking-wide mb-2">
                   Votre profil
                 </p>
                 <p className="font-display font-semibold text-white">{invitation.client_name}</p>
@@ -170,7 +170,7 @@ export default function ReviewFormPage() {
               </div>
 
               {/* Expiry notice */}
-              <div className="flex items-center gap-2 text-xs text-ink-500 font-mono">
+              <div className="flex items-center gap-2 text-xs font-mono">
                 <Clock className="w-3.5 h-3.5 shrink-0" />
                 Lien valable jusqu'au{' '}
                 {new Date(invitation.expires_at).toLocaleDateString('fr-FR', {
@@ -180,7 +180,7 @@ export default function ReviewFormPage() {
 
               {/* Star rating */}
               <div>
-                <p className="text-xs font-mono text-ink-400 uppercase tracking-wide mb-3 text-center">
+                <p className="text-xs font-mono uppercase tracking-wide mb-3 text-center">
                   Note globale
                 </p>
                 <StarPicker value={rating} onChange={setRating} />
@@ -188,7 +188,7 @@ export default function ReviewFormPage() {
 
               {/* Review content */}
               <div>
-                <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-2">
+                <label className="block text-xs font-mono uppercase tracking-wide mb-2">
                   Votre témoignage *
                 </label>
                 <textarea

@@ -144,3 +144,12 @@
 .prose-blog ul li::before { content:'\25B8'; position:absolute; left:0; color:var(--accent); font-size:0.75rem; top:4px; }
 .prose-blog hr { border-color:var(--border); margin:2rem 0; }
 .prose-blog img { border-radius:0.75rem; width:100%; margin:1.5rem 0; border:1px solid var(--border); }
+
+/* ── Fix textes hardcodés hérités ─────────────────────────────────────── */
+.glass h3, .glass h2, .glass p,
+.glass .font-display, .glass .font-body {
+  color: inherit;
+}
+
+article h3 { color: var(--text-primary) !important; }
+article p  { color: var(--text-secondary) !important; }

@@ -42,7 +42,7 @@ export default function ProjectsPage() {
                 )}
               </div>
               <div className="p-6">
-                <h3 className="font-display font-bold text-white text-xl mb-2">{project.title}</h3>
+                <h3 className="font-display font-bold text-xl mb-2">{project.title}</h3>
                 <p className="text-ink-300 text-sm leading-relaxed mb-4">
                   {truncate(project.description, 130)}
                 </p>
@@ -52,7 +52,7 @@ export default function ProjectsPage() {
                 <div className="flex items-center gap-3">
                   {project.github_url && (
                     <a href={project.github_url} target="_blank" rel="noreferrer"
-                       className="flex items-center gap-1.5 text-ink-400 hover:text-white text-sm transition-colors duration-200">
+                       className="flex items-center gap-1.5 hover:text-white text-sm transition-colors duration-200">
                       <Github className="w-4 h-4" />{t('projects.source')}
                     </a>
                   )}

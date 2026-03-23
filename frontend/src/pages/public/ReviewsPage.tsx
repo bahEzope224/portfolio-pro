@@ -105,14 +105,14 @@ function ReviewStats({ reviews }: { reviews: Review[] }) {
           return (
             <div key={star} className="flex items-center gap-3">
               <div className="flex items-center gap-1 w-10 shrink-0">
-                <span className="text-xs font-mono text-ink-400">{star}</span>
+                <span className="text-xs font-mono">{star}</span>
                 <Star className="w-3 h-3 fill-gold-DEFAULT text-gold-DEFAULT" />
               </div>
               <div className="flex-1 h-1.5 bg-ink-800 rounded-full overflow-hidden">
                 <div className="h-full rounded-full bg-gradient-to-r from-gold-DEFAULT to-gold-light transition-all duration-700"
                      style={{ width: `${pct}%` }} />
               </div>
-              <span className="text-xs font-mono text-ink-500 w-6 text-right shrink-0">{count}</span>
+              <span className="text-xs font-mono w-6 text-right shrink-0">{count}</span>
             </div>
           )
         })}

@@ -30,7 +30,7 @@ export default function CVPage() {
         <div className="flex flex-col items-center justify-center py-32 gap-6">
           <div className="w-24 h-24 rounded-3xl bg-ink-800/60 border border-white/[0.06]
                           flex items-center justify-center animate-float">
-            <FileText className="w-10 h-10 text-ink-500" />
+            <FileText className="w-10 h-10" />
           </div>
           <p className="text-ink-400 text-sm">{t('cv.errLoad')}</p>
         </div>
@@ -46,7 +46,7 @@ export default function CVPage() {
               </div>
               <div>
                 <p className="font-display font-semibold text-white text-sm">{cv.filename}</p>
-                <p className="text-xs text-ink-400 font-mono">
+                <p className="text-xs font-mono">
                   {new Date(cv.upload_date).toLocaleDateString(
                     i18n.language.startsWith('fr') ? 'fr-FR' : 'en-GB'
                   )}
@@ -63,15 +63,15 @@ export default function CVPage() {
               <div className="flex items-center justify-center gap-4 mb-4">
                 <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
-                        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 text-ink-300 hover:text-white transition-all">
+                        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 hover:text-white transition-all">
                   <ChevronLeft className="w-5 h-5" />
                 </button>
-                <span className="text-sm font-mono text-ink-300">
+                <span className="text-sm font-mono">
                   {t('cv.page')} {currentPage} {t('cv.of')} {numPages}
                 </span>
                 <button onClick={() => setCurrentPage((p) => Math.min(numPages, p + 1))}
                         disabled={currentPage === numPages}
-                        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 text-ink-300 hover:text-white transition-all">
+                        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 hover:text-white transition-all">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
