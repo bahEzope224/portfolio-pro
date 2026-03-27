@@ -1,21 +1,9 @@
-"""
-Email sending utility using SMTP (works with Gmail, Mailtrap, Brevo, etc.)
-Configure via environment variables.
-"""
-
 import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import requests
 from typing import Optional
 
-
-SMTP_HOST     = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT     = int(os.getenv("SMTP_PORT", 587))
-SMTP_USER     = os.getenv("SMTP_USER", "")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", SMTP_USER)  # where to receive messages
-
+BREVO_API_KEY = os.getenv("BREVO_API_KEY", "")
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "")
 
 def send_contact_email(
     sender_name: str,
@@ -24,11 +12,10 @@ def send_contact_email(
     message: str,
 ) -> bool:
     """
-    Send a contact form submission to the portfolio owner's inbox.
-    Returns True on success, False on failure.
+    Envoie le message via l'API Brevo (fonctionne sur Render gratuit).
     """
-    if not SMTP_USER or not SMTP_PASSWORD:
-        # Dev mode: just print the message
+    if not BREVO_API_KEY or not CONTACT_EMAIL:
+        # Mode dev : on affiche juste dans la console
         print(f"\n--- CONTACT EMAIL (dev mode) ---")
         print(f"From: {sender_name} <{sender_email}>")
         print(f"Subject: {subject}")
@@ -37,30 +24,42 @@ def send_contact_email(
         return True
 
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"[Portfolio Contact] {subject}"
-        msg["From"]    = SMTP_USER
-        msg["To"]      = CONTACT_EMAIL
-        msg["Reply-To"] = f"{sender_name} <{sender_email}>"
+        payload = {
+            "sender": {"name": "Portfolio Contact", "email": CONTACT_EMAIL},
+            "to": [{"email": CONTACT_EMAIL}],
+            "replyTo": {"name": sender_name, "email": sender_email},
+            "subject": f"[Portfolio Contact] {subject}",
+            "htmlContent": f"""
+            <html>
+            <body style="font-family:sans-serif;max-width:600px;margin:auto">
+                <h2 style="color:#6366f1">Nouveau message depuis ton portfolio</h2>
+                <p><strong>Nom :</strong> {sender_name}</p>
+                <p><strong>Email :</strong> <a href="mailto:{sender_email}">{sender_email}</a></p>
+                <p><strong>Sujet :</strong> {subject}</p>
+                <hr/>
+                <p style="white-space:pre-wrap">{message}</p>
+            </body>
+            </html>
+            """
+        }
 
-        html_body = f"""
-        <html><body style="font-family:sans-serif;max-width:600px;margin:auto">
-          <h2 style="color:#6366f1">New message from your portfolio</h2>
-          <p><strong>Name:</strong> {sender_name}</p>
-          <p><strong>Email:</strong> <a href="mailto:{sender_email}">{sender_email}</a></p>
-          <p><strong>Subject:</strong> {subject}</p>
-          <hr/>
-          <p style="white-space:pre-wrap">{message}</p>
-        </body></html>
-        """
-        msg.attach(MIMEText(html_body, "html"))
+        response = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json"
+            },
+            json=payload,
+            timeout=10
+        )
 
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, CONTACT_EMAIL, msg.as_string())
+        if response.status_code == 201:
+            print(f"[email] ✅ Message envoyé via Brevo à {CONTACT_EMAIL}")
+            return True
+        else:
+            print(f"[email] ❌ Erreur Brevo {response.status_code}: {response.text}")
+            return False
 
-        return True
     except Exception as exc:
         print(f"[email] Failed to send: {exc}")
         return False

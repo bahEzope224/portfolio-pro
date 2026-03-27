@@ -6,7 +6,7 @@ En dev : stockage local si les vars R2 ne sont pas définies.
 
 import os
 import uuid
-import boto3
+import boto3 # type: ignore
 from pathlib import Path
 from fastapi import HTTPException, UploadFile, status
 
