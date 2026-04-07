@@ -16,7 +16,12 @@ export default function CVPage() {
   const [numPages,    setNumPages]    = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pdfLoading,  setPdfLoading]  = useState(true)
-  const pdfUrl = cv ? assetUrl(cv.file_path) : null
+  const pdfUrl      = cv ? assetUrl(cv.file_path) : null
+  // Use backend proxy for the in-browser viewer to avoid CORS from Cloudflare R2
+  const apiBase     = import.meta.env.VITE_API_URL ?? ''
+  const pdfProxyUrl = cv?.file_path?.startsWith('http')
+    ? `${apiBase}/cv/proxy`
+    : pdfUrl
 
   return (
     <Section className="pt-32">
@@ -83,7 +88,7 @@ export default function CVPage() {
                   <Loader2 className="w-8 h-8 animate-spin text-accent-400" />
                 </div>
               )}
-              <Document file={pdfUrl}
+              <Document file={pdfProxyUrl}
                 onLoadSuccess={({ numPages: n }) => { setNumPages(n); setPdfLoading(false) }}
                 onLoadError={() => setPdfLoading(false)}
                 loading="">
