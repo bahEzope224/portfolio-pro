@@ -7,11 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /** Format a "YYYY-MM" date string to a readable month/year */
-export function formatMonthYear(dateStr: string): string {
+export function formatMonthYear(dateStr: string, lang = 'fr'): string {
   if (!dateStr) return ''
   const [year, month] = dateStr.split('-')
   const date = new Date(Number(year), Number(month) - 1)
-  return date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+  const locale = lang.startsWith('fr') ? 'fr-FR' : 'en-GB'
+  return date.toLocaleDateString(locale, { month: 'long', year: 'numeric' })
 }
 
 /** Build full URL for an uploaded file */

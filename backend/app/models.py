@@ -25,7 +25,9 @@ class Project(Base):
 
     id          = Column(Integer, primary_key=True, index=True)
     title       = Column(String(150), nullable=False)
+    title_en    = Column(String(150), nullable=True)
     description = Column(Text, nullable=False)
+    description_en = Column(Text, nullable=True)
     tech_stack  = Column(JSON, default=list)   # ["React", "FastAPI", ...]
     github_url  = Column(String(500), nullable=True)
     live_url    = Column(String(500), nullable=True)
@@ -43,11 +45,14 @@ class Experience(Base):
     id          = Column(Integer, primary_key=True, index=True)
     company     = Column(String(150), nullable=False)
     position    = Column(String(150), nullable=False)
+    position_en = Column(String(150), nullable=True)
     start_date  = Column(String(20), nullable=False)   # "2022-01" (YYYY-MM)
     end_date    = Column(String(20), nullable=True)    # None means "Present"
     description = Column(Text, nullable=False)
+    description_en = Column(Text, nullable=True)
     logo_path   = Column(String(500), nullable=True)
     location    = Column(String(150), nullable=True)
+    location_en = Column(String(150), nullable=True)
     order       = Column(Integer, default=0)
     created_at  = Column(DateTime, default=datetime.utcnow)
     updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -59,7 +64,9 @@ class Skill(Base):
 
     id       = Column(Integer, primary_key=True, index=True)
     name     = Column(String(100), nullable=False)
+    name_en  = Column(String(100), nullable=True)
     category = Column(String(100), nullable=False)   # "Frontend", "Backend", "DevOps" …
+    category_en = Column(String(100), nullable=True)
     level    = Column(Integer, default=50)           # 0–100
     icon     = Column(String(100), nullable=True)    # e.g. "react", "python" (for devicons)
     order    = Column(Integer, default=0)
@@ -83,9 +90,11 @@ class Review(Base):
     id          = Column(Integer, primary_key=True, index=True)
     author_name = Column(String(150), nullable=False)
     author_role = Column(String(150), nullable=False)   # "CTO @ Startup Paris"
+    author_role_en = Column(String(150), nullable=True)
     company     = Column(String(150), nullable=True)
     avatar_path = Column(String(500), nullable=True)    # uploaded avatar image
     content     = Column(Text, nullable=False)           # testimonial text
+    content_en  = Column(Text, nullable=True)
     rating      = Column(Integer, default=5)             # 1–5 stars
     is_featured = Column(Boolean, default=False)
     is_visible  = Column(Boolean, default=True)          # toggle display on/off
@@ -124,9 +133,12 @@ class BlogPost(Base):
 
     id            = Column(Integer, primary_key=True, index=True)
     title         = Column(String(300), nullable=False)
+    title_en      = Column(String(300), nullable=True)
     slug          = Column(String(320), unique=True, index=True, nullable=False)
     excerpt       = Column(String(500), nullable=True)
+    excerpt_en    = Column(String(500), nullable=True)
     content       = Column(Text, nullable=False)
+    content_en    = Column(Text, nullable=True)
     cover_path    = Column(String(500), nullable=True)
     category      = Column(String(100), nullable=False, default="Général")
     tags          = Column(JSON, default=list)

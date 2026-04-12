@@ -3,7 +3,9 @@
 export interface Project {
   id: number
   title: string
+  title_en?: string
   description: string
+  description_en?: string
   tech_stack: string[]
   github_url?: string
   live_url?: string
@@ -18,11 +20,14 @@ export interface Experience {
   id: number
   company: string
   position: string
+  position_en?: string
   start_date: string   // "YYYY-MM"
   end_date?: string    // null = Present
   description: string
+  description_en?: string
   logo_path?: string
   location?: string
+  location_en?: string
   order: number
   created_at: string
   updated_at: string
@@ -31,7 +36,9 @@ export interface Experience {
 export interface Skill {
   id: number
   name: string
+  name_en?: string
   category: string
+  category_en?: string
   level: number       // 0–100
   icon?: string
   order: number
@@ -68,9 +75,11 @@ export interface Review {
   id: number
   author_name: string
   author_role: string
+  author_role_en?: string
   company?: string
   avatar_path?: string
   content: string
+  content_en?: string
   rating: number        // 1–5
   is_featured: boolean
   is_visible: boolean
@@ -105,9 +114,12 @@ export interface InvitationCheckResult {
 export interface BlogPost {
   id: number
   title: string
+  title_en?: string
   slug: string
   excerpt?: string
+  excerpt_en?: string
   content: string
+  content_en?: string
   cover_path?: string
   category: string
   tags: string[]
@@ -125,8 +137,10 @@ export interface BlogPost {
 export interface BlogPostSummary {
   id: number
   title: string
+  title_en?: string
   slug: string
   excerpt?: string
+  excerpt_en?: string
   cover_path?: string
   category: string
   tags: string[]

@@ -23,8 +23,11 @@ const CATEGORIES = [
 
 const schema = z.object({
   title:            z.string().min(1, 'Titre requis'),
+  title_en:         z.string().optional(),
   excerpt:          z.string().optional(),
+  excerpt_en:       z.string().optional(),
   content:          z.string().min(10, 'Contenu trop court'),
+  content_en:       z.string().optional(),
   category:         z.string().min(1, 'Catégorie requise'),
   tags:             z.string(),
   is_published:     z.boolean().default(false),
@@ -112,8 +115,11 @@ function BlogEditorModal({
     ? fullPost
       ? {
           title:            fullPost.title,
+          title_en:         fullPost.title_en ?? '',
           excerpt:          fullPost.excerpt ?? '',
-          content:          fullPost.content,   // ← contenu COMPLET
+          excerpt_en:       fullPost.excerpt_en ?? '',
+          content:          fullPost.content,
+          content_en:       fullPost.content_en ?? '',
           category:         fullPost.category,
           tags:             fullPost.tags.join(', '),
           is_published:     fullPost.is_published,
@@ -123,7 +129,8 @@ function BlogEditorModal({
         }
       : undefined  // attend le chargement
     : {
-        title: '', excerpt: '', content: '', category: 'Général',
+        title: '', title_en: '', excerpt: '', excerpt_en: '',
+        content: '', content_en: '', category: 'Général',
         tags: '', is_published: false, is_featured: false,
         meta_title: '', meta_description: '',
       }
@@ -139,12 +146,15 @@ function BlogEditorModal({
   const onSubmit = async (data: FormData) => {
     const form = new FormData()
     form.append('title',        data.title)
+    if (data.title_en)   form.append('title_en',   data.title_en)
     form.append('content',      data.content)
+    if (data.content_en) form.append('content_en', data.content_en)
     form.append('category',     data.category)
     form.append('tags',         JSON.stringify(
       data.tags.split(',').map((t) => t.trim()).filter(Boolean)
     ))
-    if (data.excerpt)          form.append('excerpt',          data.excerpt)
+    if (data.excerpt)    form.append('excerpt',    data.excerpt)
+    if (data.excerpt_en) form.append('excerpt_en', data.excerpt_en)
     if (data.meta_title)       form.append('meta_title',       data.meta_title)
     if (data.meta_description) form.append('meta_description', data.meta_description)
     form.append('is_published', String(data.is_published))
@@ -221,30 +231,66 @@ function BlogEditorModal({
               <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 sm:gap-5">
                 {/* Left — content */}
                 <div className="lg:col-span-2 flex flex-col gap-4">
-                  <div>
-                    <input {...register('title')} placeholder="Titre de l'article…"
-                      className="input-field text-lg sm:text-xl font-display font-bold" />
-                    {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Titre (FR)</label>
+                      <input {...register('title')} placeholder="Titre en français…"
+                        className="input-field text-lg font-display font-bold" />
+                      {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Title (EN)</label>
+                      <input {...register('title_en')} placeholder="English title…"
+                        className="input-field text-lg font-display font-bold" />
+                    </div>
                   </div>
 
-                  <textarea {...register('excerpt')} rows={2}
-                    placeholder="Résumé court…"
-                    className="input-field resize-none text-sm" />
-
-                  <div className="border border-white/[0.08] rounded-xl overflow-hidden">
-                    {!preview && <MarkdownToolbar textareaId="blog-content-editor" />}
-                    {preview ? (
-                      <div className="p-4 sm:p-5 min-h-48 text-ink-300 text-sm leading-relaxed overflow-auto"
-                        dangerouslySetInnerHTML={{ __html: renderPreview(contentValue) }} />
-                    ) : (
-                      <textarea {...register('content')}
-                        id="blog-content-editor" rows={14}
-                        placeholder={`# Titre\n\nVotre contenu Markdown…\n\n## Section\n\n- Point 1\n- Point 2\n\n> Citation`}
-                        className="w-full p-4 bg-transparent text-ink-200 text-sm font-mono
-                                   leading-relaxed resize-none focus:outline-none placeholder:text-ink-600" />
-                    )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Résumé (FR)</label>
+                      <textarea {...register('excerpt')} rows={2}
+                        placeholder="Résumé en français…"
+                        className="input-field resize-none text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Excerpt (EN)</label>
+                      <textarea {...register('excerpt_en')} rows={2}
+                        placeholder="English excerpt…"
+                        className="input-field resize-none text-sm" />
+                    </div>
                   </div>
-                  {errors.content && <p className="text-red-400 text-xs">{errors.content.message}</p>}
+
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Contenu (FR)</label>
+                      <div className="border border-white/[0.08] rounded-xl overflow-hidden">
+                        {!preview && <MarkdownToolbar textareaId="blog-content-editor" />}
+                        {preview ? (
+                          <div className="p-4 sm:p-5 min-h-48 text-ink-300 text-sm leading-relaxed overflow-auto"
+                            dangerouslySetInnerHTML={{ __html: renderPreview(contentValue) }} />
+                        ) : (
+                          <textarea {...register('content')}
+                            id="blog-content-editor" rows={10}
+                            placeholder="Contenu en français (Markdown)…"
+                            className="w-full p-4 bg-transparent text-ink-200 text-sm font-mono
+                                       leading-relaxed resize-none focus:outline-none placeholder:text-ink-600" />
+                        )}
+                      </div>
+                      {errors.content && <p className="text-red-400 text-xs mt-1">{errors.content.message}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-ink-500 uppercase mb-1">Content (EN)</label>
+                      <div className="border border-white/[0.08] rounded-xl overflow-hidden">
+                        {!preview && <MarkdownToolbar textareaId="blog-content-en-editor" />}
+                        <textarea {...register('content_en')}
+                          id="blog-content-en-editor" rows={10}
+                          placeholder="English content (Markdown)…"
+                          className="w-full p-4 bg-transparent text-ink-200 text-sm font-mono
+                                     leading-relaxed resize-none focus:outline-none placeholder:text-ink-600" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right — settings */}

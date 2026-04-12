@@ -105,9 +105,12 @@ const fr = {
     allCategories:    'Toutes',
     views:            'vues',
     readMore:         "Lire l'article",
+    backToBlog:       "Retour au blog",
+    readingTime:      "de lecture",
     errLoad:          'Impossible de charger les articles.',
     empty:            'Aucun article pour le moment.',
     noResults:        'Aucun article ne correspond à votre recherche.',
+    articleNotFound:  'Article introuvable',
   },
   common: {
     loading:  'Chargement…',

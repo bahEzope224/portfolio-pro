@@ -105,9 +105,12 @@ const en = {
     allCategories:    'All',
     views:            'views',
     readMore:         'Read article',
+    backToBlog:       'Back to blog',
+    readingTime:      'read',
     errLoad:          'Unable to load articles.',
     empty:            'No articles yet.',
     noResults:        'No articles match your search.',
+    articleNotFound:  'Article not found',
   },
   common: {
     loading:  'Loading…',

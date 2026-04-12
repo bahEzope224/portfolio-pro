@@ -5,8 +5,9 @@ import { useExperiences } from '@/hooks/useApi'
 import { assetUrl, formatMonthYear } from '@/lib/utils'
 
 export default function ExperiencesPage() {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const { data: experiences, isLoading, isError } = useExperiences()
+  const currentLang = i18n.language
 
   return (
     <Section className="pt-32">
@@ -22,8 +23,13 @@ export default function ExperiencesPage() {
         <div className="relative">
           <div className="absolute left-[27px] top-0 bottom-0 w-px bg-white/[0.06] hidden md:block" />
           <div className="flex flex-col gap-8">
-            {experiences.map((exp, i) => (
-              <article key={exp.id}
+            {experiences.map((exp, i) => {
+              const pos   = currentLang === 'en' && exp.position_en ? exp.position_en : exp.position
+              const loc   = currentLang === 'en' && exp.location_en ? exp.location_en : exp.location
+              const desc  = currentLang === 'en' && exp.description_en ? exp.description_en : exp.description
+
+              return (
+                <article key={exp.id}
                 className="relative flex gap-8 animate-fade-up opacity-0"
                 style={{ animationDelay: `${i * 100}ms` }}>
                 <div className="hidden md:flex shrink-0 w-14 h-14 rounded-2xl
@@ -39,27 +45,27 @@ export default function ExperiencesPage() {
                 <div className="flex-1 glass glass-hover rounded-2xl p-6">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                     <div>
-                      <h3 className="font-display font-bold text-xl">{exp.position}</h3>
+                      <h3 className="font-display font-bold text-xl">{pos}</h3>
                       <p className="font-medium" style={{ color: "var(--accent)" }}>{exp.company}</p>
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-mono">
-                        {formatMonthYear(exp.start_date)} →{' '}
-                        {exp.end_date ? formatMonthYear(exp.end_date) : t('experiences.present')}
+                        {formatMonthYear(exp.start_date, currentLang)} →{' '}
+                        {exp.end_date ? formatMonthYear(exp.end_date, currentLang) : t('experiences.present')}
                       </p>
-                      {exp.location && (
+                      {loc && (
                         <p className="flex items-center justify-end gap-1 text-xs mt-1">
-                          <MapPin className="w-3 h-3" />{exp.location}
+                          <MapPin className="w-3 h-3" />{loc}
                         </p>
                       )}
                     </div>
                   </div>
                   <p className="text-ink-300 text-sm leading-relaxed whitespace-pre-line">
-                    {exp.description}
+                    {desc}
                   </p>
                 </div>
               </article>
-            ))}
+            )})}
           </div>
         </div>
       )}

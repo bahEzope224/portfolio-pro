@@ -12,13 +12,16 @@ import { assetUrl, formatMonthYear } from '@/lib/utils'
 import type { Experience } from '@/types'
 
 const schema = z.object({
-  company:    z.string().min(1, 'Requis'),
-  position:   z.string().min(1, 'Requis'),
-  start_date: z.string().min(1, 'Requis'),
-  end_date:   z.string().optional(),
-  description: z.string().min(1, 'Requis'),
-  location:   z.string().optional(),
-  order:      z.coerce.number().default(0),
+  company:        z.string().min(1, 'Requis'),
+  position:       z.string().min(1, 'Requis'),
+  position_en:    z.string().optional(),
+  start_date:     z.string().min(1, 'Requis'),
+  end_date:       z.string().optional(),
+  description:    z.string().min(1, 'Requis'),
+  description_en: z.string().optional(),
+  location:       z.string().optional(),
+  location_en:    z.string().optional(),
+  order:          z.coerce.number().default(0),
 })
 type FormData = z.infer<typeof schema>
 
@@ -29,7 +32,18 @@ function ExperienceModal({ experience, onClose }: { experience?: Experience; onC
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: experience ?? {},
+    defaultValues: experience
+      ? {
+          ...experience,
+          position_en:    experience.position_en ?? '',
+          description_en: experience.description_en ?? '',
+          location_en:    experience.location_en ?? '',
+        }
+      : {
+          position_en: '',
+          description_en: '',
+          location_en: '',
+        },
   })
 
   const onSubmit = async (data: FormData) => {
@@ -66,17 +80,22 @@ function ExperienceModal({ experience, onClose }: { experience?: Experience; onC
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Entreprise *</label>
               <input {...register('company')} className="input-field" placeholder="ACME Corp" />
               {errors.company && <p className="text-red-400 text-xs mt-1">{errors.company.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Poste *</label>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Poste (FR) *</label>
               <input {...register('position')} className="input-field" placeholder="Développeur Full Stack" />
               {errors.position && <p className="text-red-400 text-xs mt-1">{errors.position.message}</p>}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Position (EN)</label>
+            <input {...register('position_en')} className="input-field" placeholder="Full Stack Developer" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -91,16 +110,29 @@ function ExperienceModal({ experience, onClose }: { experience?: Experience; onC
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Localisation</label>
-            <input {...register('location')} className="input-field" placeholder="Paris, France" />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Localisation (FR)</label>
+              <input {...register('location')} className="input-field" placeholder="Paris, France" />
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Location (EN)</label>
+              <input {...register('location_en')} className="input-field" placeholder="Paris, France" />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description *</label>
-            <textarea {...register('description')} rows={4} className="input-field resize-none"
-                      placeholder="Missions et réalisations…" />
-            {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description (FR) *</label>
+              <textarea {...register('description')} rows={3} className="input-field resize-none"
+                        placeholder="Missions et réalisations…" />
+              {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description (EN)</label>
+              <textarea {...register('description_en')} rows={3} className="input-field resize-none"
+                        placeholder="Missions and achievements…" />
+            </div>
           </div>
 
           <div>

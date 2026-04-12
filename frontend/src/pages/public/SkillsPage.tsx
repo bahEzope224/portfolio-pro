@@ -3,11 +3,12 @@ import { Section, SectionHeading, Spinner, EmptyState } from '@/components/ui'
 import { useSkills } from '@/hooks/useApi'
 import type { Skill } from '@/types'
 
-function SkillCard({ skill }: { skill: Skill }) {
+function SkillCard({ skill, lang }: { skill: Skill, lang: string }) {
+  const name = lang === 'en' && skill.name_en ? skill.name_en : skill.name
   return (
     <div className="glass glass-hover rounded-xl p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="font-body font-medium text-white text-sm">{skill.name}</span>
+        <span className="font-body font-medium text-white text-sm">{name}</span>
         <span className="text-xs font-mono">{skill.level}%</span>
       </div>
       <div className="skill-bar">
@@ -18,12 +19,14 @@ function SkillCard({ skill }: { skill: Skill }) {
 }
 
 export default function SkillsPage() {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const { data: skills, isLoading, isError } = useSkills()
+  const currentLang = i18n.language
 
   const grouped = skills?.reduce<Record<string, Skill[]>>((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = []
-    acc[skill.category].push(skill)
+    const cat = currentLang === 'en' && skill.category_en ? skill.category_en : skill.category
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(skill)
     return acc
   }, {})
 
@@ -47,7 +50,7 @@ export default function SkillsPage() {
                 {category}
               </h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {items.map((skill) => <SkillCard key={skill.id} skill={skill} />)}
+                {items.map((skill) => <SkillCard key={skill.id} skill={skill} lang={currentLang} />)}
               </div>
             </div>
           ))}

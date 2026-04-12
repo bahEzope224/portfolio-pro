@@ -39,7 +39,9 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
 @router.post("/", response_model=schemas.ProjectOut, status_code=201)
 def create_project(
     title: str = Form(...),
+    title_en: Optional[str] = Form(None),
     description: str = Form(...),
+    description_en: Optional[str] = Form(None),
     tech_stack: str = Form("[]"),  # JSON string
     github_url: Optional[str] = Form(None),
     live_url: Optional[str] = Form(None),
@@ -54,7 +56,9 @@ def create_project(
 
     project = models.Project(
         title=title,
+        title_en=title_en,
         description=description,
+        description_en=description_en,
         tech_stack=json.loads(tech_stack),
         github_url=github_url,
         live_url=live_url,
@@ -72,7 +76,9 @@ def create_project(
 def update_project(
     project_id: int,
     title: Optional[str] = Form(None),
+    title_en: Optional[str] = Form(None),
     description: Optional[str] = Form(None),
+    description_en: Optional[str] = Form(None),
     tech_stack: Optional[str] = Form(None),
     github_url: Optional[str] = Form(None),
     live_url: Optional[str] = Form(None),
@@ -87,8 +93,10 @@ def update_project(
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    if title is not None:       project.title       = title
-    if description is not None: project.description = description
+    if title is not None:          project.title          = title
+    if title_en is not None:       project.title_en       = title_en
+    if description is not None:    project.description    = description
+    if description_en is not None: project.description_en = description_en
     if tech_stack is not None:  project.tech_stack  = json.loads(tech_stack)
     if github_url is not None:  project.github_url  = github_url
     if live_url is not None:    project.live_url    = live_url

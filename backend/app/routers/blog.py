@@ -139,10 +139,13 @@ def get_post(slug: str, db: Session = Depends(get_db)):
 @router.post("/", response_model=schemas.BlogPostOut, status_code=201)
 def create_post(
     title: str = Form(...),
+    title_en: Optional[str] = Form(None),
     content: str = Form(...),
+    content_en: Optional[str] = Form(None),
     category: str = Form("General"),
     tags: str = Form("[]"),
     excerpt: Optional[str] = Form(None),
+    excerpt_en: Optional[str] = Form(None),
     slug: Optional[str] = Form(None),
     is_published: bool = Form(False),
     is_featured: bool = Form(False),
@@ -156,9 +159,12 @@ def create_post(
     cover_path = save_image(cover) if cover and cover.filename else None
     post = models.BlogPost(
         title=title,
+        title_en=title_en,
         slug=final_slug,
         excerpt=excerpt,
+        excerpt_en=excerpt_en,
         content=content,
+        content_en=content_en,
         category=category,
         tags=json.loads(tags),
         reading_time=estimate_reading_time(content),
@@ -179,10 +185,13 @@ def create_post(
 def update_post(
     post_id: int,
     title: Optional[str] = Form(None),
+    title_en: Optional[str] = Form(None),
     content: Optional[str] = Form(None),
+    content_en: Optional[str] = Form(None),
     category: Optional[str] = Form(None),
     tags: Optional[str] = Form(None),
     excerpt: Optional[str] = Form(None),
+    excerpt_en: Optional[str] = Form(None),
     slug: Optional[str] = Form(None),
     is_published: Optional[bool] = Form(None),
     is_featured: Optional[bool] = Form(None),
@@ -197,15 +206,21 @@ def update_post(
         raise HTTPException(status_code=404, detail="Article non trouve")
     if title is not None:
         post.title = title
+    if title_en is not None:
+        post.title_en = title_en
     if content is not None:
         post.content = content
         post.reading_time = estimate_reading_time(content)
+    if content_en is not None:
+        post.content_en = content_en
     if category is not None:
         post.category = category
     if tags is not None:
         post.tags = json.loads(tags)
     if excerpt is not None:
         post.excerpt = excerpt
+    if excerpt_en is not None:
+        post.excerpt_en = excerpt_en
     if meta_title is not None:
         post.meta_title = meta_title
     if meta_description is not None:

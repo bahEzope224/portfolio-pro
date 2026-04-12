@@ -9,11 +9,13 @@ import { useSkills, useCreateSkill, useUpdateSkill, useDeleteSkill } from '@/hoo
 import type { Skill } from '@/types'
 
 const schema = z.object({
-  name:     z.string().min(1, 'Requis'),
-  category: z.string().min(1, 'Requis'),
-  level:    z.coerce.number().min(0).max(100),
-  icon:     z.string().optional(),
-  order:    z.coerce.number().default(0),
+  name:        z.string().min(1, 'Requis'),
+  name_en:     z.string().optional(),
+  category:    z.string().min(1, 'Requis'),
+  category_en: z.string().optional(),
+  level:       z.coerce.number().min(0).max(100),
+  icon:        z.string().optional(),
+  order:       z.coerce.number().default(0),
 })
 type FormData = z.infer<typeof schema>
 
@@ -23,7 +25,13 @@ function SkillModal({ skill, onClose }: { skill?: Skill; onClose: () => void }) 
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: skill ?? { level: 50, order: 0 },
+    defaultValues: skill
+      ? {
+          ...skill,
+          name_en: skill.name_en ?? '',
+          category_en: skill.category_en ?? '',
+        }
+      : { level: 50, order: 0, name_en: '', category_en: '' },
   })
 
   const levelValue = watch('level', skill?.level ?? 50)
@@ -58,16 +66,27 @@ function SkillModal({ skill, onClose }: { skill?: Skill; onClose: () => void }) 
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Nom *</label>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Nom (FR) *</label>
               <input {...register('name')} className="input-field" placeholder="React" />
               {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Catégorie *</label>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Name (EN)</label>
+              <input {...register('name_en')} className="input-field" placeholder="React" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Catégorie (FR) *</label>
               <input {...register('category')} className="input-field" placeholder="Frontend" />
               {errors.category && <p className="text-red-400 text-xs mt-1">{errors.category.message}</p>}
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Category (EN)</label>
+              <input {...register('category_en')} className="input-field" placeholder="Frontend" />
             </div>
           </div>
 

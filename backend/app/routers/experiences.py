@@ -31,10 +31,13 @@ def get_experience(exp_id: int, db: Session = Depends(get_db)):
 def create_experience(
     company: str = Form(...),
     position: str = Form(...),
+    position_en: Optional[str] = Form(None),
     start_date: str = Form(...),
     end_date: Optional[str] = Form(None),
     description: str = Form(...),
+    description_en: Optional[str] = Form(None),
     location: Optional[str] = Form(None),
+    location_en: Optional[str] = Form(None),
     order: int = Form(0),
     logo: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
@@ -42,9 +45,10 @@ def create_experience(
 ):
     logo_path = save_image(logo) if logo and logo.filename else None
     exp = models.Experience(
-        company=company, position=position,
+        company=company, position=position, position_en=position_en,
         start_date=start_date, end_date=end_date,
-        description=description, location=location,
+        description=description, description_en=description_en,
+        location=location, location_en=location_en,
         order=order, logo_path=logo_path,
     )
     db.add(exp)
@@ -58,10 +62,13 @@ def update_experience(
     exp_id: int,
     company: Optional[str] = Form(None),
     position: Optional[str] = Form(None),
+    position_en: Optional[str] = Form(None),
     start_date: Optional[str] = Form(None),
     end_date: Optional[str] = Form(None),
     description: Optional[str] = Form(None),
+    description_en: Optional[str] = Form(None),
     location: Optional[str] = Form(None),
+    location_en: Optional[str] = Form(None),
     order: Optional[int] = Form(None),
     logo: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
@@ -71,12 +78,15 @@ def update_experience(
     if not exp:
         raise HTTPException(status_code=404, detail="Experience not found")
 
-    if company is not None:     exp.company     = company
-    if position is not None:    exp.position    = position
-    if start_date is not None:  exp.start_date  = start_date
-    if end_date is not None:    exp.end_date    = end_date
-    if description is not None: exp.description = description
-    if location is not None:    exp.location    = location
+    if company is not None:        exp.company        = company
+    if position is not None:       exp.position       = position
+    if position_en is not None:    exp.position_en    = position_en
+    if start_date is not None:     exp.start_date     = start_date
+    if end_date is not None:       exp.end_date       = end_date
+    if description is not None:    exp.description    = description
+    if description_en is not None: exp.description_en = description_en
+    if location is not None:       exp.location       = location
+    if location_en is not None:    exp.location_en    = location_en
     if order is not None:       exp.order       = order
 
     if logo and logo.filename:

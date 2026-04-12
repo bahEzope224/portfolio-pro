@@ -40,9 +40,13 @@ function Avatar({ review }: { review: Review }) {
 }
 
 function ReviewCard({ review, index }: { review: Review; index: number }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = i18n.language
   const [expanded, setExpanded] = useState(false)
-  const isLong = review.content.length > 220
+
+  const role    = currentLang === 'en' && review.author_role_en ? review.author_role_en : review.author_role
+  const content = currentLang === 'en' && review.content_en     ? review.content_en     : review.content
+  const isLong  = content.length > 220
 
   return (
     <article className="glass glass-hover rounded-2xl p-7 flex flex-col gap-5
@@ -63,7 +67,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
       </div>
       <blockquote className="text-ink-200 text-[15px] leading-relaxed font-body italic relative">
         <span className="text-accent-400 text-2xl font-display not-italic leading-none mr-1">"</span>
-        {isLong && !expanded ? review.content.slice(0, 220) + '…' : review.content}
+        {isLong && !expanded ? content.slice(0, 220) + '…' : content}
         <span className="text-accent-400 text-2xl font-display not-italic leading-none ml-0.5">"</span>
         {isLong && (
           <button onClick={() => setExpanded(!expanded)}
@@ -77,7 +81,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
         <div>
           <p className="font-display font-semibold text-white text-sm">{review.author_name}</p>
           <p className="text-ink-400 text-xs font-body">
-            {review.author_role}
+            {role}
             {review.company && <span className="text-ink-500"> · {review.company}</span>}
           </p>
         </div>

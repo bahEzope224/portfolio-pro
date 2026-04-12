@@ -15,13 +15,15 @@ import type { Project } from '@/types'
 
 // ── Zod schema ───────────────────────────────────────────────────────────
 const schema = z.object({
-  title:       z.string().min(1, 'Titre requis'),
-  description: z.string().min(1, 'Description requise'),
-  tech_stack:  z.string(),   // comma-separated
-  github_url:  z.string().optional(),
-  live_url:    z.string().optional(),
-  is_featured: z.boolean().default(false),
-  order:       z.coerce.number().default(0),
+  title:          z.string().min(1, 'Titre requis'),
+  title_en:       z.string().optional(),
+  description:    z.string().min(1, 'Description requise'),
+  description_en: z.string().optional(),
+  tech_stack:     z.string(),   // comma-separated
+  github_url:     z.string().optional(),
+  live_url:       z.string().optional(),
+  is_featured:    z.boolean().default(false),
+  order:          z.coerce.number().default(0),
 })
 type FormData = z.infer<typeof schema>
 
@@ -41,22 +43,29 @@ function ProjectModal({
     resolver: zodResolver(schema),
     defaultValues: project
       ? {
-          title:       project.title,
-          description: project.description,
-          tech_stack:  project.tech_stack.join(', '),
-          github_url:  project.github_url ?? '',
-          live_url:    project.live_url ?? '',
-          is_featured: project.is_featured,
-          order:       project.order,
+          title:          project.title,
+          title_en:       project.title_en ?? '',
+          description:    project.description,
+          description_en: project.description_en ?? '',
+          tech_stack:     project.tech_stack.join(', '),
+          github_url:     project.github_url ?? '',
+          live_url:       project.live_url ?? '',
+          is_featured:    project.is_featured,
+          order:          project.order,
         }
-      : {},
+      : {
+          title_en: '',
+          description_en: '',
+        },
   })
 
   const onSubmit = async (data: FormData) => {
     const form = new FormData()
-    form.append('title',       data.title)
-    form.append('description', data.description)
-    form.append('tech_stack',  JSON.stringify(data.tech_stack.split(',').map(t => t.trim()).filter(Boolean)))
+    form.append('title',          data.title)
+    if (data.title_en)       form.append('title_en',       data.title_en)
+    form.append('description',    data.description)
+    if (data.description_en) form.append('description_en', data.description_en)
+    form.append('tech_stack',     JSON.stringify(data.tech_stack.split(',').map(t => t.trim()).filter(Boolean)))
     if (data.github_url)  form.append('github_url',  data.github_url)
     if (data.live_url)    form.append('live_url',    data.live_url)
     form.append('is_featured', String(data.is_featured))
@@ -97,17 +106,29 @@ function ProjectModal({
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           {/* Title */}
-          <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Titre *</label>
-            <input {...register('title')} className="input-field" placeholder="Mon super projet" />
-            {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Titre (FR) *</label>
+              <input {...register('title')} className="input-field" placeholder="Mon super projet" />
+              {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Title (EN)</label>
+              <input {...register('title_en')} className="input-field" placeholder="My super project" />
+            </div>
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description *</label>
-            <textarea {...register('description')} rows={3} className="input-field resize-none" placeholder="Description du projet…" />
-            {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description (FR) *</label>
+              <textarea {...register('description')} rows={3} className="input-field resize-none" placeholder="Description du projet…" />
+              {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">Description (EN)</label>
+              <textarea {...register('description_en')} rows={3} className="input-field resize-none" placeholder="Project description…" />
+            </div>
           </div>
 
           {/* Tech stack */}

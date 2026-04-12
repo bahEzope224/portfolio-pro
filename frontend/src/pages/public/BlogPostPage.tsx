@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { Clock, Eye, ArrowLeft, Tag, Calendar, BookOpen } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useBlogPost } from '@/hooks/useApi'
 import { Spinner, Badge } from '@/components/ui'
 import { assetUrl } from '@/lib/utils'
@@ -48,7 +49,10 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
+  const { t, i18n } = useTranslation()
   const { data: post, isLoading, isError } = useBlogPost(slug ?? '')
+  const currentLang = i18n.language
+  const locale = currentLang.startsWith('fr') ? 'fr-FR' : 'en-GB'
 
   if (isLoading) return (
     <div className="min-h-screen bg-ink-900 flex items-center justify-center">
@@ -59,10 +63,14 @@ export default function BlogPostPage() {
   if (isError || !post) return (
     <div className="min-h-screen bg-ink-900 flex flex-col items-center justify-center gap-4">
       <BookOpen className="w-12 h-12 text-ink-600" />
-      <h2 className="font-display font-bold text-white text-xl">Article introuvable</h2>
-      <Link to="/blog" className="btn-ghost">← Retour au blog</Link>
+      <h2 className="font-display font-bold text-white text-xl">{t('blog.articleNotFound')}</h2>
+      <Link to="/blog" className="btn-ghost">← {t('blog.backToBlog')}</Link>
     </div>
   )
+
+  const title   = currentLang === 'en' && post.title_en   ? post.title_en   : post.title
+  const excerpt = currentLang === 'en' && post.excerpt_en ? post.excerpt_en : post.excerpt
+  const content = currentLang === 'en' && post.content_en ? post.content_en : post.content
 
   const categoryColor = CATEGORY_COLORS[post.category] ?? 'bg-accent-500/15 text-accent-300 border-accent-500/20'
 
@@ -75,7 +83,7 @@ export default function BlogPostPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink-900/50 to-ink-900 z-10" />
             <img
               src={assetUrl(post.cover_path)}
-              alt={post.title}
+              alt={title}
               className="w-full h-full object-cover"
             />
           </div>
@@ -91,7 +99,7 @@ export default function BlogPostPage() {
                        text-sm font-mono transition-colors duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour au blog
+            {t('blog.backToBlog')}
           </Link>
         </div>
       </div>
@@ -107,16 +115,16 @@ export default function BlogPostPage() {
           </span>
           <span className="flex items-center gap-1.5 text-xs font-mono">
             <Clock className="w-3.5 h-3.5" />
-            {post.reading_time} min de lecture
+            {post.reading_time} min {t('blog.readingTime')}
           </span>
           <span className="flex items-center gap-1.5 text-xs font-mono">
             <Eye className="w-3.5 h-3.5" />
-            {post.views} vues
+            {post.views} {t('blog.views')}
           </span>
           {post.published_at && (
             <span className="flex items-center gap-1.5 text-xs font-mono">
               <Calendar className="w-3.5 h-3.5" />
-              {new Date(post.published_at).toLocaleDateString('fr-FR', {
+              {new Date(post.published_at).toLocaleDateString(locale, {
                 day: 'numeric', month: 'long', year: 'numeric',
               })}
             </span>
@@ -126,14 +134,14 @@ export default function BlogPostPage() {
         {/* Title */}
         <h1 className="font-display font-bold text-white text-3xl md:text-4xl
                        leading-tight mb-4">
-          {post.title}
+          {title}
         </h1>
 
         {/* Excerpt */}
-        {post.excerpt && (
+        {excerpt && (
           <p className="text-ink-300 text-lg leading-relaxed mb-6 italic
                         border-l-2 border-accent-500/40 pl-4">
-            {post.excerpt}
+            {excerpt}
           </p>
         )}
 
@@ -153,7 +161,7 @@ export default function BlogPostPage() {
         {/* Article body — Markdown rendered */}
         <article
           className="prose-blog"
-          dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
         />
       </div>
     </div>

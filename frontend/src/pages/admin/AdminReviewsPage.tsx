@@ -17,14 +17,16 @@ import type { Review } from '@/types'
 
 // ── Zod schema ────────────────────────────────────────────────────────────
 const schema = z.object({
-  author_name: z.string().min(1, 'Requis'),
-  author_role: z.string().min(1, 'Requis'),
-  company:     z.string().optional(),
-  content:     z.string().min(10, 'Avis trop court (min. 10 caractères)'),
-  rating:      z.coerce.number().min(1).max(5).default(5),
-  is_featured: z.boolean().default(false),
-  is_visible:  z.boolean().default(true),
-  order:       z.coerce.number().default(0),
+  author_name:    z.string().min(1, 'Requis'),
+  author_role:    z.string().min(1, 'Requis'),
+  author_role_en: z.string().optional(),
+  company:        z.string().optional(),
+  content:        z.string().min(10, 'Avis trop court (min. 10 caractères)'),
+  content_en:     z.string().optional(),
+  rating:         z.coerce.number().min(1).max(5).default(5),
+  is_featured:    z.boolean().default(false),
+  is_visible:     z.boolean().default(true),
+  order:          z.coerce.number().default(0),
 })
 type FormData = z.infer<typeof schema>
 
@@ -84,30 +86,34 @@ function ReviewModal({
     resolver: zodResolver(schema),
     defaultValues: review
       ? {
-          author_name: review.author_name,
-          author_role: review.author_role,
-          company:     review.company ?? '',
-          content:     review.content,
-          rating:      review.rating,
-          is_featured: review.is_featured,
-          is_visible:  review.is_visible,
-          order:       review.order,
+          author_name:    review.author_name,
+          author_role:    review.author_role,
+          author_role_en: review.author_role_en ?? '',
+          company:        review.company ?? '',
+          content:        review.content,
+          content_en:     review.content_en ?? '',
+          rating:         review.rating,
+          is_featured:    review.is_featured,
+          is_visible:     review.is_visible,
+          order:          review.order,
         }
-      : { rating: 5, is_featured: false, is_visible: true, order: 0 },
+      : { rating: 5, is_featured: false, is_visible: true, order: 0, author_role_en: '', content_en: '' },
   })
 
   const ratingValue = watch('rating', review?.rating ?? 5)
 
   const onSubmit = async (data: FormData) => {
     const form = new FormData()
-    form.append('author_name', data.author_name)
-    form.append('author_role', data.author_role)
-    if (data.company) form.append('company', data.company)
-    form.append('content',     data.content)
-    form.append('rating',      String(data.rating))
-    form.append('is_featured', String(data.is_featured))
-    form.append('is_visible',  String(data.is_visible))
-    form.append('order',       String(data.order))
+    form.append('author_name',    data.author_name)
+    form.append('author_role',    data.author_role)
+    if (data.author_role_en) form.append('author_role_en', data.author_role_en)
+    if (data.company)        form.append('company',        data.company)
+    form.append('content',        data.content)
+    if (data.content_en)     form.append('content_en',     data.content_en)
+    form.append('rating',         String(data.rating))
+    form.append('is_featured',    String(data.is_featured))
+    form.append('is_visible',     String(data.is_visible))
+    form.append('order',          String(data.order))
     if (avatarFile) form.append('avatar', avatarFile)
 
     try {
@@ -144,27 +150,22 @@ function ReviewModal({
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           {/* Author */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">
-                Nom *
-              </label>
-              <input {...register('author_name')} className="input-field"
-                     placeholder="Marie Dupont" />
-              {errors.author_name && (
-                <p className="text-red-400 text-xs mt-1">{errors.author_name.message}</p>
-              )}
+              <label className="block text-xs font-mono text-ink-400 uppercase mb-1">Nom *</label>
+              <input {...register('author_name')} className="input-field" placeholder="Marie Dupont" />
+              {errors.author_name && <p className="text-red-400 text-xs mt-1">{errors.author_name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">
-                Rôle *
-              </label>
-              <input {...register('author_role')} className="input-field"
-                     placeholder="CEO" />
-              {errors.author_role && (
-                <p className="text-red-400 text-xs mt-1">{errors.author_role.message}</p>
-              )}
+              <label className="block text-xs font-mono text-ink-400 uppercase mb-1">Role (FR) *</label>
+              <input {...register('author_role')} className="input-field" placeholder="CEO" />
+              {errors.author_role && <p className="text-red-400 text-xs mt-1">{errors.author_role.message}</p>}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono text-ink-400 uppercase mb-1">Role (EN)</label>
+            <input {...register('author_role_en')} className="input-field" placeholder="CEO" />
           </div>
 
           {/* Company */}
@@ -177,19 +178,18 @@ function ReviewModal({
           </div>
 
           {/* Content */}
-          <div>
-            <label className="block text-xs font-mono text-ink-400 uppercase tracking-wide mb-1.5">
-              Témoignage *
-            </label>
-            <textarea
-              {...register('content')}
-              rows={5}
-              className="input-field resize-none"
-              placeholder="Décrivez votre expérience de travail avec ce développeur…"
-            />
-            {errors.content && (
-              <p className="text-red-400 text-xs mt-1">{errors.content.message}</p>
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase mb-1">Témoignage (FR) *</label>
+              <textarea {...register('content')} rows={5} className="input-field resize-none"
+                        placeholder="Avis en français…" />
+              {errors.content && <p className="text-red-400 text-xs mt-1">{errors.content.message}</p>}
+            </div>
+            <div>
+              <label className="block text-xs font-mono text-ink-400 uppercase mb-1">Testimonial (EN)</label>
+              <textarea {...register('content_en')} rows={5} className="input-field resize-none"
+                        placeholder="English testimonial…" />
+            </div>
           </div>
 
           {/* Rating */}

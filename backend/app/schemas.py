@@ -43,7 +43,9 @@ class AdminUserOut(BaseModel):
 
 class ProjectBase(BaseModel):
     title: str
+    title_en: Optional[str] = None
     description: str
+    description_en: Optional[str] = None
     tech_stack: List[str] = []
     github_url: Optional[str] = None
     live_url: Optional[str] = None
@@ -77,10 +79,13 @@ class ProjectOut(ProjectBase):
 class ExperienceBase(BaseModel):
     company: str
     position: str
+    position_en: Optional[str] = None
     start_date: str        # "YYYY-MM"
     end_date: Optional[str] = None
     description: str
+    description_en: Optional[str] = None
     location: Optional[str] = None
+    location_en: Optional[str] = None
     order: int = 0
 
 
@@ -111,7 +116,9 @@ class ExperienceOut(ExperienceBase):
 
 class SkillBase(BaseModel):
     name: str
+    name_en: Optional[str] = None
     category: str
+    category_en: Optional[str] = None
     level: int = 50
     icon: Optional[str] = None
     order: int = 0
@@ -172,8 +179,10 @@ class ContactMessage(BaseModel):
 class ReviewBase(BaseModel):
     author_name: str
     author_role: str
+    author_role_en: Optional[str] = None
     company: Optional[str] = None
     content: str
+    content_en: Optional[str] = None
     rating: int = 5
     is_featured: bool = False
     is_visible: bool = True
@@ -259,8 +268,11 @@ class PublicReviewSubmit(BaseModel):
 
 class BlogPostBase(BaseModel):
     title:            str
+    title_en:         Optional[str] = None
     excerpt:          Optional[str] = None
+    excerpt_en:       Optional[str] = None
     content:          str
+    content_en:       Optional[str] = None
     category:         str = "Général"
     tags:             List[str] = []
     reading_time:     int = 5
@@ -297,8 +309,10 @@ class BlogPostOut(BlogPostBase):
 class BlogPostSummary(BaseModel):
     id:           int
     title:        str
+    title_en:     Optional[str] = None
     slug:         str
     excerpt:      Optional[str] = None
+    excerpt_en:   Optional[str] = None
     cover_path:   Optional[str] = None
     category:     str
     tags:         List[str]

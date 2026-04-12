@@ -20,14 +20,19 @@ function getCategoryColor(cat: string) {
 
 function PostCard({ post, index }: { post: BlogPostSummary; index: number }) {
   const { t, i18n } = useTranslation()
-  const locale = i18n.language.startsWith('fr') ? 'fr-FR' : 'en-GB'
+  const currentLang = i18n.language
+  const locale = currentLang.startsWith('fr') ? 'fr-FR' : 'en-GB'
+
+  const title   = currentLang === 'en' && post.title_en   ? post.title_en   : post.title
+  const excerpt = currentLang === 'en' && post.excerpt_en ? post.excerpt_en : post.excerpt
+
   return (
     <Link to={`/blog/${post.slug}`}
           className="glass glass-hover rounded-2xl overflow-hidden group animate-fade-up opacity-0 flex flex-col"
           style={{ animationDelay: `${index * 70}ms` }}>
       <div className="aspect-video bg-ink-800/60 overflow-hidden relative">
         {post.cover_path ? (
-          <img src={assetUrl(post.cover_path)} alt={post.title}
+          <img src={assetUrl(post.cover_path)} alt={title}
                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-ink-800 to-ink-900">
@@ -41,10 +46,10 @@ function PostCard({ post, index }: { post: BlogPostSummary; index: number }) {
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-display font-bold text-white text-lg leading-tight mb-2
                        group-hover:text-accent-300 transition-colors duration-200">
-          {post.title}
+          {title}
         </h3>
-        {post.excerpt && (
-          <p className="text-ink-300 text-sm leading-relaxed mb-4 flex-1">{truncate(post.excerpt, 120)}</p>
+        {excerpt && (
+          <p className="text-ink-300 text-sm leading-relaxed mb-4 flex-1">{truncate(excerpt, 120)}</p>
         )}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">

@@ -5,47 +5,52 @@ import { useProjects } from '@/hooks/useApi'
 import { assetUrl, truncate } from '@/lib/utils'
 
 export default function ProjectsPage() {
-  const { t } = useTranslation()
-  const { data: projects, isLoading, isError } = useProjects()
+    const { i18n, t } = useTranslation()
+    const { data: projects, isLoading, isError } = useProjects()
+    const currentLang = i18n.language
 
-  return (
-    <Section className="pt-32">
-      <SectionHeading
-        tag={t('projects.tag')}
-        title={t('projects.title')}
-        subtitle={t('projects.subtitle')}
-      />
-      {isLoading && <Spinner />}
-      {isError   && <EmptyState message={t('projects.errLoad')} />}
-      {projects && projects.length === 0 && <EmptyState message={t('projects.empty')} />}
-      {projects && projects.length > 0 && (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, i) => (
-            <article key={project.id}
-              className="glass glass-hover rounded-2xl overflow-hidden group animate-fade-up opacity-0"
-              style={{ animationDelay: `${i * 80}ms` }}>
-              <div className="aspect-video bg-ink-800/60 overflow-hidden relative">
-                {project.image_path ? (
-                  <img src={assetUrl(project.image_path)} alt={project.title}
-                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <ImageOff className="w-8 h-8 text-ink-600" />
+    return (
+      <Section className="pt-32">
+        <SectionHeading
+          tag={t('projects.tag')}
+          title={t('projects.title')}
+          subtitle={t('projects.subtitle')}
+        />
+        {isLoading && <Spinner />}
+        {isError   && <EmptyState message={t('projects.errLoad')} />}
+        {projects && projects.length === 0 && <EmptyState message={t('projects.empty')} />}
+        {projects && projects.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, i) => {
+              const title = currentLang === 'en' && project.title_en ? project.title_en : project.title
+              const desc  = currentLang === 'en' && project.description_en ? project.description_en : project.description
+
+              return (
+                <article key={project.id}
+                  className="glass glass-hover rounded-2xl overflow-hidden group animate-fade-up opacity-0"
+                  style={{ animationDelay: `${i * 80}ms` }}>
+                  <div className="aspect-video bg-ink-800/60 overflow-hidden relative">
+                    {project.image_path ? (
+                      <img src={assetUrl(project.image_path)} alt={title}
+                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageOff className="w-8 h-8 text-ink-600" />
+                      </div>
+                    )}
+                    {project.is_featured && (
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full
+                                       bg-gold-DEFAULT/20 border border-gold-DEFAULT/30
+                                       text-gold-light text-xs font-mono">
+                        {t('projects.featured')}
+                      </span>
+                    )}
                   </div>
-                )}
-                {project.is_featured && (
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full
-                                   bg-gold-DEFAULT/20 border border-gold-DEFAULT/30
-                                   text-gold-light text-xs font-mono">
-                    {t('projects.featured')}
-                  </span>
-                )}
-              </div>
-              <div className="p-6">
-                <h3 className="font-display font-bold text-xl mb-2">{project.title}</h3>
-                <p className="text-ink-300 text-sm leading-relaxed mb-4">
-                  {truncate(project.description, 130)}
-                </p>
+                  <div className="p-6">
+                    <h3 className="font-display font-bold text-xl mb-2">{title}</h3>
+                    <p className="text-ink-300 text-sm leading-relaxed mb-4">
+                      {truncate(desc, 130)}
+                    </p>
                 <div className="flex flex-wrap gap-1.5 mb-5">
                   {project.tech_stack.map((tech) => <Badge key={tech} label={tech} />)}
                 </div>
@@ -63,9 +68,10 @@ export default function ProjectsPage() {
                     </a>
                   )}
                 </div>
-              </div>
-            </article>
-          ))}
+                  </div>
+                </article>
+              )
+            })}
         </div>
       )}
     </Section>
