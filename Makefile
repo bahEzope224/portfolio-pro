@@ -1,6 +1,6 @@
 # Portfolio — Raccourcis de développement
 
-.PHONY: backend frontend seed install help
+.PHONY: backend frontend seed install help migrate
 
 help:
 	@echo "Commandes disponibles :"
@@ -8,6 +8,7 @@ help:
 	@echo "  make backend   — Lance le serveur FastAPI"
 	@echo "  make frontend  — Lance le serveur Vite"
 	@echo "  make seed      — Peuple la base avec des données de démo"
+	@echo "  make migrate   — Applique les migrations de base de données"
 	@echo "  make dev       — Lance backend + frontend en parallèle"
 
 install:
@@ -15,7 +16,10 @@ install:
 	cd frontend && npm install
 
 backend:
-	cd backend && . venv/bin/activate && uvicorn app.main:app --reload --port 8000
+	cd backend && . venv/bin/activate && python migrate_db.py && uvicorn app.main:app --reload --port 8000
+
+migrate:
+	cd backend && . venv/bin/activate && python migrate_db.py
 
 frontend:
 	cd frontend && npm run dev
