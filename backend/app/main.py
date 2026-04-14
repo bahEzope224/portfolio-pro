@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 import logging
@@ -24,9 +26,13 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
+# --- Robust CORS Configuration ---
 # Récupère les origines depuis les variables d'environnement
 raw_origins = os.getenv("FRONTEND_URL", "https://nomad-developer.me")
-allow_origins = [o.strip() for o in raw_origins.split(",")]
+# Split by comma and strip spaces
+allow_origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+
+# Add fallbacks for safety
 if "https://nomad-developer.me" not in allow_origins:
     allow_origins.append("https://nomad-developer.me")
 if "http://localhost:5173" not in allow_origins:
@@ -39,6 +45,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- Global Exception Handler Middleware ---
+@app.middleware("http")
+async def db_session_middleware(request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        logger.error(f"❌ GLOBAL ERROR: {e}", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal Server Error", "error": str(e)},
+            # Manual CORS headers as fallback
+            headers={
+                "Access-Control-Allow-Origin": request.headers.get("Origin", "*"),
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Credentials": "true",
+            }
+        )
 
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(auth.router,        prefix="/api/auth",        tags=["Auth"])
