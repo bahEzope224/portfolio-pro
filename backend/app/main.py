@@ -25,8 +25,12 @@ app = FastAPI(
 )
 
 # Récupère les origines depuis les variables d'environnement
-raw_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
+raw_origins = os.getenv("FRONTEND_URL", "https://nomad-developer.me")
 allow_origins = [o.strip() for o in raw_origins.split(",")]
+if "https://nomad-developer.me" not in allow_origins:
+    allow_origins.append("https://nomad-developer.me")
+if "http://localhost:5173" not in allow_origins:
+    allow_origins.append("http://localhost:5173")
 
 app.add_middleware(
     CORSMiddleware,
