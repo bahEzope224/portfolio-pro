@@ -61,8 +61,9 @@ def migrate():
         logger.info("✨ Migration process finished successfully!")
         
     except Exception as e:
-        logger.error(f"💥 Migration failed: {e}")
-        sys.exit(1)
+        logger.error(f"💥 Migration failed with unexpected error: {e}")
+        logger.error("⚠️ Server will still start. Please run migration manually if needed.")
+        # Do NOT exit - let the server start anyway
 
 if __name__ == "__main__":
     migrate()
