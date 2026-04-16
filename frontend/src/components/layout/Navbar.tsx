@@ -25,7 +25,7 @@ export default function Navbar() {
   const NAV_LINKS = [
     { to: '/',            label: t('nav.home') },
     { to: '/projects',    label: t('nav.projects') },
-    { to: '/experiences', label: t('nav.experiences') },
+    // { to: '/experiences', label: t('nav.experiences') },
     { to: '/skills',      label: t('nav.skills') },
     { to: '/reviews',     label: t('nav.reviews') },
     { to: '/cv',          label: t('nav.cv') },
@@ -45,7 +45,7 @@ export default function Navbar() {
             <Code2 className="w-4 h-4" style={{ color: 'var(--accent)' }} />
           </div>
           <span className="font-display font-bold text-lg tracking-tight" style={{ color: 'var(--text-primary)' }}>
-            dev<span style={{ color: 'var(--accent)' }}>.</span>Bah
+            Nomad<span style={{ color: 'var(--accent)' }}>.</span>Developper
           </span>
         </Link>
 
