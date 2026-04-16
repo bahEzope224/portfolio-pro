@@ -5,7 +5,7 @@ import ProtectedRoute from '@/components/layout/ProtectedRoute'
 
 import HomePage from '@/pages/public/HomePage'
 import ProjectsPage from '@/pages/public/ProjectsPage'
-import ExperiencesPage from '@/pages/public/ExperiencesPage'
+// import ExperiencesPage from '@/pages/public/ExperiencesPage'
 import SkillsPage from '@/pages/public/SkillsPage'
 import CVPage from '@/pages/public/CVPage'
 import ContactPage from '@/pages/public/ContactPage'
@@ -32,7 +32,7 @@ export default function App() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/experiences" element={<ExperiencesPage />} />
+        {/* <Route path="/experiences" element={<ExperiencesPage />} /> */}
         <Route path="/skills" element={<SkillsPage />} />
         <Route path="/cv" element={<CVPage />} />
         <Route path="/contact" element={<ContactPage />} />
