@@ -107,8 +107,8 @@ export default function HomePage() {
       <div style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg-surface)' }}>
         <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { value: '3+', labelKey: 'home.stats.experience' },
-            { value: '20+', labelKey: 'home.stats.projects' },
+            { value: '2+', labelKey: 'home.stats.experience' },
+            { value: '5+', labelKey: 'home.stats.projects' },
             { value: '10+', labelKey: 'home.stats.technologies' },
             { value: '100%', labelKey: 'home.stats.satisfaction' },
           ].map(({ value, labelKey }) => (
